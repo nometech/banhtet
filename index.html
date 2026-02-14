@@ -3,106 +3,541 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản Lý Bánh Chưng Tết 2026</title>
+    <title>Quản Lý Bếp Bánh Tết 2026</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --tet-red: #b71c1c;       /* Đỏ đậm */
-            --tet-red-light: #ffcdd2; 
-            --tet-yellow: #ffd600;    /* Vàng tươi */
-            --tet-gold: #fbc02d;      /* Vàng đồng */
-            --bg-cream: #fffde7;      /* Màu kem nền */
-            --text-dark: #3e2723;     /* Nâu đậm */
-            --success: #2e7d32;
-            --white: #ffffff;
+            --tet-red: #d32f2f;
+            --tet-red-bg: #ffebee;
+            --tet-yellow: #fbc02d;
+            --bg-cream: #fffde7;
+            --text-dark: #3e2723;
+            --blue-dark: #1565c0;
+            --blue-bg: #e3f2fd;
+            --green: #2e7d32;
         }
 
         * { box-sizing: border-box; font-family: 'Roboto', sans-serif; }
         
         body { 
-            margin: 0; 
-            background-color: var(--bg-cream); 
-            color: var(--text-dark);
-            background-image: radial-gradient(#fbc02d 0.5px, transparent 0.5px), radial-gradient(#fbc02d 0.5px, #fffde7 0.5px);
-            background-size: 20px 20px;
-            background-position: 0 0, 10px 10px;
+            margin: 0; background-color: var(--bg-cream); color: var(--text-dark);
+            padding-bottom: 50px;
         }
 
-        /* Header phong cách Tết */
+        /* Header */
         header {
-            background: linear-gradient(135deg, var(--tet-red), #8e0000);
+            background: linear-gradient(135deg, var(--tet-red), #b71c1c);
             color: var(--tet-yellow);
-            padding: 15px 25px;
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            border-bottom: 3px solid var(--tet-gold);
+            position: sticky; top: 0; z-index: 100;
         }
-        header h1 {
-            font-family: 'Merriweather', serif;
-            margin: 0;
-            font-size: 1.4rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        header h1 { font-family: 'Merriweather', serif; margin: 0; font-size: 1.2rem; text-transform: uppercase; }
+        .btn-header { 
+            background: rgba(255,255,255,0.2); border: 1px solid var(--tet-yellow); 
+            color: var(--tet-yellow); padding: 6px 12px; border-radius: 4px; 
+            font-size: 0.85rem; cursor: pointer; transition: 0.2s; margin-left: 5px;
         }
-        header i { color: var(--tet-yellow); margin-right: 10px; }
-        .btn-reset { 
-            background: transparent; 
-            border: 1px solid var(--tet-yellow); 
-            color: var(--tet-yellow);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            transition: 0.3s;
-        }
-        .btn-reset:hover { background: var(--tet-yellow); color: var(--tet-red); }
+        .btn-header:hover { background: var(--tet-yellow); color: var(--tet-red); }
 
-        /* Dashboard */
+        /* Dashboard Section Title */
+        .section-title {
+            padding: 15px 20px 5px 20px;
+            font-family: 'Merriweather', serif;
+            color: var(--text-dark);
+            border-bottom: 2px solid #eee;
+            margin: 10px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        /* Dashboard Cards */
         .dashboard {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 15px;
-            padding: 20px;
+            padding: 10px 20px;
         }
         .card {
-            background: var(--white);
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            text-align: center;
-            border: 1px solid #eee;
-            position: relative;
-            overflow: hidden;
+            background: white; padding: 15px; border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-align: center;
+            border-top: 4px solid #ccc;
         }
-        .card::after {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 4px;
-            background: var(--tet-red);
-        }
-        .card h3 { margin: 0 0 5px 0; font-size: 0.9rem; color: #777; font-weight: normal; }
-        .card .number { font-size: 1.6rem; font-weight: bold; color: var(--tet-red); font-family: 'Merriweather', serif; }
+        .card h3 { margin: 0 0 5px 0; font-size: 0.85rem; color: #666; font-weight: normal; }
+        .card .number { font-size: 1.5rem; font-weight: bold; font-family: 'Merriweather', serif; }
+        .card .sub-text { font-size: 0.8rem; color: #888; margin-top: 5px; }
         
+        .card-delivery { border-top-color: var(--tet-red); background: var(--tet-red-bg); }
+        .card-delivery .number { color: var(--tet-red); }
+        
+        .card-production { border-top-color: var(--blue-dark); background: var(--blue-bg); }
+        .card-production .number { color: var(--blue-dark); }
+        
+        .card-finance { border-top-color: var(--tet-yellow); background: #fff; }
+        .card-finance .number { color: #f57f17; }
+
         /* Controls */
-        .controls {
-            padding: 0 20px;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 15px;
+        .controls { padding: 10px 20px; display: flex; gap: 10px; flex-wrap: wrap; }
+        input, select, button { padding: 10px; border: 1px solid #ddd; border-radius: 6px; outline: none; }
+        .search-box { flex-grow: 1; }
+        button { cursor: pointer; border: none; font-weight: 600; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .btn-add { background: var(--tet-red); color: white; }
+
+        /* Table */
+        .table-container { background: white; margin: 0 20px; border-radius: 8px; overflow-x: auto; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; min-width: 1100px; }
+        th { background: #eee; padding: 12px; text-align: left; font-weight: bold; color: #444; border-bottom: 2px solid #ccc; }
+        td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
+        
+        tr.done-row { background: #f5f5f5; color: #999; }
+        tr.done-row td { opacity: 0.6; }
+        tr.done-row .font-bold { font-weight: normal; }
+
+        /* Status Buttons */
+        .status-btn { padding: 5px 10px; border-radius: 20px; border: 1px solid #ccc; background: white; cursor: pointer; font-size: 0.75rem; font-weight: bold; width: 100%; display: block; margin-bottom: 4px; transition: all 0.2s;}
+        .status-btn:hover { transform: scale(1.05); }
+        .is-paid { background: #e8f5e9; color: var(--green); border-color: var(--green); }
+        .is-done { background: #424242; color: #fff; border-color: #424242; }
+        .not-done { background: white; color: var(--tet-red); border-color: var(--tet-red); }
+
+        .chay-tag { font-size: 0.8rem; font-weight: bold; color: #7b1fa2; }
+
+        /* Modal */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 2000; }
+        .modal-content { background: white; padding: 25px; border-radius: 8px; width: 95%; max-width: 600px; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        .form-row { display: flex; gap: 10px; margin-bottom: 15px; }
+        .form-group { flex: 1; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 500; }
+        .form-group input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        .modal-actions { text-align: right; margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; }
+        .btn-cancel { background: #eee; color: #333; margin-right: 10px; }
+        .btn-save { background: var(--tet-red); color: white; }
+
+        .text-right { text-align: right; }
+        .font-bold { font-weight: bold; }
+        .text-red { color: var(--tet-red); }
+        
+        @media (max-width: 600px) {
+            .dashboard { grid-template-columns: 1fr 1fr; }
+            .form-row { flex-direction: column; gap: 5px; }
         }
-        input, select, button { 
-            padding: 10px 15px; 
-            border: 1px solid #ddd; 
-            border-radius: 6px; 
-            outline: none; 
-            font-size: 0.95rem;
+    </style>
+</head>
+<body>
+
+<header>
+    <h1><i class="fas fa-gift"></i> Bếp Tết 2026</h1>
+    <div>
+        <button class="btn-header" onclick="openProductionModal()"><i class="fas fa-hammer"></i> Cập nhật Kho</button>
+        <button class="btn-header" onclick="openSettings()"><i class="fas fa-cog"></i></button>
+    </div>
+</header>
+
+<div class="section-title">
+    <span><i class="fas fa-truck"></i> GIAO HÀNG (Cần giao)</span>
+</div>
+<div class="dashboard">
+    <div class="card card-delivery">
+        <h3>Chưng Mặn Cần Giao</h3>
+        <div class="number" id="del-chung">0</div>
+        <div class="sub-text">Tổng đơn: <span id="total-chung-order">0</span></div>
+    </div>
+    <div class="card card-delivery">
+        <h3>Tét Mặn Cần Giao</h3>
+        <div class="number" id="del-tet">0</div>
+        <div class="sub-text">Tổng đơn: <span id="total-tet-order">0</span></div>
+    </div>
+    <div class="card card-delivery" style="background:#f3e5f5; border-top-color:#7b1fa2;">
+        <h3 style="color:#7b1fa2">Chay Cần Giao</h3>
+        <div class="number" style="color:#7b1fa2">
+            <span id="del-chung-chay">0</span> | <span id="del-tet-chay">0</span>
+        </div>
+        <div class="sub-text">Chưng / Tét</div>
+    </div>
+    <div class="card card-finance">
+        <h3>Đã Thu Tiền</h3>
+        <div class="number" id="collected-money">0</div>
+        <div class="sub-text">Doanh thu: <span id="total-money">0</span></div>
+    </div>
+</div>
+
+<div class="section-title">
+    <span><i class="fas fa-fire"></i> SẢN XUẤT (Kho bếp)</span>
+    <span style="font-size: 0.8rem; font-weight: normal; color: #666;">(Nhập số bánh đã gói xong)</span>
+</div>
+<div class="dashboard">
+    <div class="card card-production">
+        <h3>Tiến Độ Chưng Mặn</h3>
+        <div class="number">
+            <span id="prod-wrapped-chung" style="color:var(--green)">0</span> / <span id="prod-total-chung">0</span>
+        </div>
+        <div class="sub-text text-red">Còn thiếu: <span id="prod-missing-chung" class="font-bold">0</span></div>
+    </div>
+    <div class="card card-production">
+        <h3>Tiến Độ Tét Mặn</h3>
+        <div class="number">
+            <span id="prod-wrapped-tet" style="color:var(--green)">0</span> / <span id="prod-total-tet">0</span>
+        </div>
+        <div class="sub-text text-red">Còn thiếu: <span id="prod-missing-tet" class="font-bold">0</span></div>
+    </div>
+    <div class="card card-production">
+        <h3>Tiến Độ Bánh Chay</h3>
+        <div class="number" style="font-size: 1.2rem;">
+            <span id="prod-wrapped-chay">0</span> / <span id="prod-total-chay">0</span>
+        </div>
+        <div class="sub-text">Chưng + Tét</div>
+    </div>
+</div>
+
+<div class="controls">
+    <input type="text" id="search-input" class="search-box" placeholder="Tìm tên khách..." oninput="renderTable()">
+    <select id="filter-done" onchange="renderTable()">
+        <option value="all">Tất cả đơn</option>
+        <option value="pending" selected>Chưa giao (Ưu tiên)</option>
+        <option value="done">Đã giao xong</option>
+    </select>
+    <button class="btn-add" onclick="openOrderModal()"><i class="fas fa-plus"></i> Tạo Đơn Mới</button>
+</div>
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th width="40">STT</th>
+                <th>Khách Hàng</th>
+                <th class="text-right">Chưng</th>
+                <th class="text-right">Tét</th>
+                <th class="text-right">Chay</th>
+                <th>Ngày lấy</th>
+                <th>Tổng Tiền</th>
+                <th class="text-center" width="100">Trạng Thái</th>
+                <th>Ghi chú</th>
+                <th class="text-right">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody id="table-body">
+            </tbody>
+    </table>
+</div>
+
+<div class="modal" id="orderModal">
+    <div class="modal-content">
+        <h2 id="modal-title">Thông Tin Đơn Hàng</h2>
+        <input type="hidden" id="order-id">
+        <div class="form-group"><label>Tên Khách</label><input type="text" id="cust-name"></div>
+        
+        <div style="background:#f9f9f9; padding:10px; margin:10px 0; border-radius:5px;">
+            <div class="form-row">
+                <div class="form-group"><label>Chưng Mặn</label><input type="number" id="qty-chung" oninput="calcTotal()"></div>
+                <div class="form-group"><label>Giá</label><input type="number" id="price-chung" oninput="calcTotal()"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Tét Mặn</label><input type="number" id="qty-tet" oninput="calcTotal()"></div>
+                <div class="form-group"><label>Giá</label><input type="number" id="price-tet" oninput="calcTotal()"></div>
+            </div>
+            <div class="form-row" style="border-top:1px dashed #ccc; padding-top:10px;">
+                <div class="form-group"><label>Chưng Chay</label><input type="number" id="qty-chung-chay" oninput="calcTotal()"></div>
+                <div class="form-group"><label>Tét Chay</label><input type="number" id="qty-tet-chay" oninput="calcTotal()"></div>
+                <div class="form-group"><label>Giá Chay</label><input type="number" id="price-chay" oninput="calcTotal()"></div>
+            </div>
+            <div class="text-right font-bold text-red">Tổng: <span id="modal-total">0</span> đ</div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group"><label>Ngày lấy</label><input type="date" id="date"></div>
+            <div class="form-group"><label>Ghi chú</label><input type="text" id="note"></div>
+        </div>
+
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="document.getElementById('orderModal').style.display='none'">Hủy</button>
+            <button class="btn-save" onclick="saveOrder()">Lưu Đơn</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="prodModal">
+    <div class="modal-content" style="max-width:400px">
+        <h2><i class="fas fa-hammer"></i> Cập Nhật Kho Bánh</h2>
+        <p style="font-size:0.9rem; color:#666">Nhập tổng số lượng bánh đã gói xong (đã luộc) hiện có trong kho.</p>
+        <div class="form-group"><label style="color:var(--tet-red)">Kho Chưng Mặn</label><input type="number" id="inv-chung" style="font-weight:bold; color:var(--tet-red)"></div>
+        <div class="form-group"><label style="color:var(--blue-dark)">Kho Tét Mặn</label><input type="number" id="inv-tet" style="font-weight:bold; color:var(--blue-dark)"></div>
+        <div class="form-row">
+            <div class="form-group"><label>Kho Chưng Chay</label><input type="number" id="inv-chung-chay"></div>
+            <div class="form-group"><label>Kho Tét Chay</label><input type="number" id="inv-tet-chay"></div>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="document.getElementById('prodModal').style.display='none'">Đóng</button>
+            <button class="btn-save" onclick="saveProduction()">Cập nhật</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="settingModal">
+    <div class="modal-content" style="max-width:400px">
+        <h2>Cài Đặt & Dữ Liệu</h2>
+        <div class="form-group"><label>Giá Chưng Mặn</label><input type="number" id="set-chung"></div>
+        <div class="form-group"><label>Giá Tét Mặn</label><input type="number" id="set-tet"></div>
+        <div class="form-group"><label>Giá Bánh Chay</label><input type="number" id="set-chay"></div>
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="restoreOriginalData()" style="float:left; background:#d32f2f; color:white">Khôi phục Dữ liệu Gốc</button>
+            <button class="btn-save" onclick="saveSettings()">Lưu Giá</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Dữ liệu gốc từ File Excel
+    const originalData = [{"id": 1, "name": "Vân Mạnh", "chung": 2, "tet": 2, "chung_chay": 1, "tet_chay": 0, "date": "2026-12-28", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 2, "name": "Thương(M.Nguyên)", "chung": 2, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 3, "name": "C.Thanh(Toàn)", "chung": 4, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-29", "note": "80k(Nhiều nhân) (Đã trả tiền)", "isPaid": true, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 4, "name": "Dung Bình", "chung": 2, "tet": 1, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "bánh tết +120k bánh ông táo", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 5, "name": "Thảo(Trường Huy)", "chung": 8, "tet": 2, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "ít đậu (2 cái chưa thanh toán)", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 6, "name": "Mẹ Vương Anh", "chung": 2, "tet": 2, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-28", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 7, "name": "A.Lực(Bà Lục)", "chung": 8, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 8, "name": "Cô Lan(MNHS)", "chung": 12, "tet": 1, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-28", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 9, "name": "Tâm tin", "chung": 6, "tet": 6, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 10, "name": "C Vân Lương", "chung": 2, "tet": 1, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 11, "name": "Mự Hưng", "chung": 24, "tet": 3, "chung_chay": 4, "tet_chay": 0, "date": "2026-12-27", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 12, "name": "C Cúc Mận", "chung": 4, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 13, "name": "C Việt", "chung": 4, "tet": 1, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 14, "name": "C Liên Linh", "chung": 20, "tet": 0, "chung_chay": 2, "tet_chay": 0, "date": "2026-12-29", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 15, "name": "Hằng (MNHS)", "chung": 4, "tet": 6, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "1 chưng nhỏ + tét không đậu (Đã  trả tiền)", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 16, "name": "C Liễu bánh", "chung": 4, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 17, "name": "Hoài An", "chung": 5, "tet": 2, "chung_chay": 3, "tet_chay": 0, "date": "2026-12-28", "note": "80k (Nhiều nhân)", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 18, "name": "C Hà Anh", "chung": 6, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-28", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 19, "name": "C Ngân(Huy)", "chung": 22, "tet": 12, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-28", "note": "80k (ít đậu)", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 20, "name": "C Huệ(THHS)", "chung": 6, "tet": 2, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-28", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 21, "name": "C Loan", "chung": 6, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-28", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 22, "name": "C Mai Hoa", "chung": 2, "tet": 1, "chung_chay": 1, "tet_chay": 0, "date": "2026-12-28", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 23, "name": "C Huệ Văn", "chung": 4, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-28", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 24, "name": "C Nga Tính", "chung": 8, "tet": 2, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-27", "note": "60k (bánh nhỏ)", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 25, "name": "Vân Đạo", "chung": 2, "tet": 2, "chung_chay": 4, "tet_chay": 0, "date": "2026-12-28", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 26, "name": "C Yến Chuối", "chung": 7, "tet": 6, "chung_chay": 11, "tet_chay": 0, "date": "2026-12-28", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 27, "name": "32 Ngô Đức Kế", "chung": 8, "tet": 1, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "Bánh chưng nhỏ", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 28, "name": "B Hương Cát", "chung": 18, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-28", "note": "Đã trả tiền", "isPaid": true, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 29, "name": "Mẹ Quang Tuấn", "chung": 5, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-28", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 30, "name": "C Vinh", "chung": 2, "tet": 0, "chung_chay": 2, "tet_chay": 0, "date": "", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 31, "name": "Dì Huệ", "chung": 2, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 32, "name": "Cô Dương", "chung": 10, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-28", "note": "26/12 lấy 6 bánh", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 33, "name": "A Lợi", "chung": 4, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "Ít đậu", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 34, "name": "C Liên (Hằng Vy)", "chung": 6, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-27", "note": "ít đậu", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 35, "name": "Đào Hà", "chung": 2, "tet": 2, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-28", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 36, "name": "Giang (Mẹ Bảo Nam)", "chung": 1, "tet": 2, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 37, "name": "Cô Soa", "chung": 5, "tet": 1, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-29", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 38, "name": "Thầy Hùng Thể", "chung": 6, "tet": 4, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-27", "note": "Bánh 80k", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 39, "name": "Quỳnh Khánh", "chung": 8, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-29", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 40, "name": "Bà Phương dưa cá", "chung": 8, "tet": 4, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-28", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 41, "name": "Hương Châu", "chung": 2, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 42, "name": "C Hiền MNHS", "chung": 1, "tet": 1, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 43, "name": "Bà Phụng", "chung": 16, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "80k(Nhiều đậu)", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 44, "name": "Thanh cò", "chung": 4, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-29", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 45, "name": "C Thanh(Yến Chuối)", "chung": 0, "tet": 0, "chung_chay": 10, "tet_chay": 4, "date": "", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 46, "name": "Bà Mai thịt", "chung": 3, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-29", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 47, "name": "Mẹ Đ.Anh", "chung": 7, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-28", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 48, "name": "O Thành", "chung": 5, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "Tính tiền 7 cái", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 49, "name": "C Quỳnh", "chung": 4, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-29", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}];
+
+    let orders = [];
+    let prices = { chung: 60000, tet: 50000, chay: 30000 };
+    let inventory = { chung: 0, tet: 0, chung_chay: 0, tet_chay: 0 }; 
+
+    function init() {
+        const dOrders = localStorage.getItem('tet2026_final_orders');
+        const dPrices = localStorage.getItem('tet2026_final_prices');
+        const dInv = localStorage.getItem('tet2026_final_inventory');
+
+        if(dOrders) {
+            orders = JSON.parse(dOrders);
+        } else {
+            // Lần đầu chạy -> Nạp dữ liệu gốc
+            orders = JSON.parse(JSON.stringify(originalData));
+            save();
         }
-        input:focus { border-color: var(--tet-red); }
-        .search-box { flex-grow: 1; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        button { cursor: pointer; border: none; font-weight: 600; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+        if(dPrices) prices = JSON.parse(dPrices);
+        if(dInv) inventory = JSON.parse(dInv);
+
+        renderTable();
+        updateStats();
+    }
+
+    function save() {
+        localStorage.setItem('tet2026_final_orders', JSON.stringify(orders));
+        localStorage.setItem('tet2026_final_prices', JSON.stringify(prices));
+        localStorage.setItem('tet2026_final_inventory', JSON.stringify(inventory));
+        updateStats();
+    }
+
+    function updateStats() {
+        let total = { chung: 0, tet: 0, chung_chay: 0, tet_chay: 0, revenue: 0, collected: 0 };
+        let remaining = { chung: 0, tet: 0, chung_chay: 0, tet_chay: 0 };
+
+        orders.forEach(o => {
+            total.chung += o.chung;
+            total.tet += o.tet;
+            total.chung_chay += o.chung_chay;
+            total.tet_chay += o.tet_chay;
+            
+            let money = (o.chung * o.prices.chung) + (o.tet * o.prices.tet) + ((o.chung_chay + o.tet_chay) * o.prices.chay);
+            total.revenue += money;
+            if(o.isPaid) total.collected += money;
+
+            if(!o.isDone) {
+                remaining.chung += o.chung;
+                remaining.tet += o.tet;
+                remaining.chung_chay += o.chung_chay;
+                remaining.tet_chay += o.tet_chay;
+            }
+        });
+
+        // Dashboard Sales
+        document.getElementById('del-chung').innerText = remaining.chung;
+        document.getElementById('total-chung-order').innerText = total.chung;
+        document.getElementById('del-tet').innerText = remaining.tet;
+        document.getElementById('total-tet-order').innerText = total.tet;
+        document.getElementById('del-chung-chay').innerText = remaining.chung_chay;
+        document.getElementById('del-tet-chay').innerText = remaining.tet_chay;
+        document.getElementById('collected-money').innerText = formatMoney(total.collected);
+        document.getElementById('total-money').innerText = formatMoney(total.revenue);
+
+        // Dashboard Production
+        document.getElementById('prod-wrapped-chung').innerText = inventory.chung;
+        document.getElementById('prod-total-chung').innerText = total.chung;
+        let missingChung = total.chung - inventory.chung;
+        document.getElementById('prod-missing-chung').innerText = missingChung > 0 ? missingChung : "Đủ";
+        
+        document.getElementById('prod-wrapped-tet').innerText = inventory.tet;
+        document.getElementById('prod-total-tet').innerText = total.tet;
+        let missingTet = total.tet - inventory.tet;
+        document.getElementById('prod-missing-tet').innerText = missingTet > 0 ? missingTet : "Đủ";
+
+        let totalChay = total.chung_chay + total.tet_chay;
+        let invChay = inventory.chung_chay + inventory.tet_chay;
+        document.getElementById('prod-wrapped-chay').innerText = invChay;
+        document.getElementById('prod-total-chay').innerText = totalChay;
+    }
+
+    function renderTable() {
+        const tbody = document.getElementById('table-body');
+        const search = document.getElementById('search-input').value.toLowerCase();
+        const filter = document.getElementById('filter-done').value;
+        
+        tbody.innerHTML = '';
+
+        orders.forEach((o, idx) => {
+            if(search && !o.name.toLowerCase().includes(search) && !o.note.toLowerCase().includes(search)) return;
+            if(filter === 'pending' && o.isDone) return;
+            if(filter === 'done' && !o.isDone) return;
+
+            let money = (o.chung * o.prices.chung) + (o.tet * o.prices.tet) + ((o.chung_chay + o.tet_chay) * o.prices.chay);
+            let chayTxt = (o.chung_chay || o.tet_chay) ? `<span class="chay-tag">${o.chung_chay}C | ${o.tet_chay}T</span>` : '-';
+            
+            let tr = document.createElement('tr');
+            if(o.isDone) tr.className = 'done-row';
+
+            tr.innerHTML = `
+                <td>${idx+1}</td>
+                <td class="font-bold">${o.name}</td>
+                <td class="text-right">${o.chung||'-'}</td>
+                <td class="text-right">${o.tet||'-'}</td>
+                <td class="text-right">${chayTxt}</td>
+                <td>${formatDate(o.date)}</td>
+                <td class="font-bold text-red">${formatMoney(money)}</td>
+                <td>
+                    <button class="status-btn ${o.isPaid?'is-paid':'not-done'}" onclick="togglePaid(${o.id})">
+                        ${o.isPaid ? 'Đã thu tiền' : 'Chưa thu'}
+                    </button>
+                    <button class="status-btn ${o.isDone?'is-done':'not-done'}" onclick="toggleDone(${o.id})">
+                        ${o.isDone ? 'Đã giao' : 'Chưa giao'}
+                    </button>
+                </td>
+                <td style="font-size:0.85rem">${o.note}</td>
+                <td class="text-right">
+                    <button onclick="copyBill(${o.id})" title="Copy bill" style="color:#1976d2; background:none; border:none; font-size:1.1rem; cursor:pointer"><i class="fas fa-copy"></i></button>
+                    <button onclick="editOrder(${o.id})" style="color:#333; background:none; border:none; font-size:1.1rem; cursor:pointer"><i class="fas fa-pen"></i></button>
+                    <button onclick="delOrder(${o.id})" style="color:#d32f2f; background:none; border:none; font-size:1.1rem; cursor:pointer"><i class="fas fa-trash"></i></button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function togglePaid(id) {
+        let o = orders.find(x => x.id === id); o.isPaid = !o.isPaid; save(); renderTable();
+    }
+    
+    function toggleDone(id) {
+        let o = orders.find(x => x.id === id); o.isDone = !o.isDone; save(); renderTable();
+    }
+
+    function openProductionModal() {
+        document.getElementById('prodModal').style.display = 'flex';
+        document.getElementById('inv-chung').value = inventory.chung;
+        document.getElementById('inv-tet').value = inventory.tet;
+        document.getElementById('inv-chung-chay').value = inventory.chung_chay;
+        document.getElementById('inv-tet-chay').value = inventory.tet_chay;
+    }
+
+    function saveProduction() {
+        inventory.chung = parseInt(document.getElementById('inv-chung').value) || 0;
+        inventory.tet = parseInt(document.getElementById('inv-tet').value) || 0;
+        inventory.chung_chay = parseInt(document.getElementById('inv-chung-chay').value) || 0;
+        inventory.tet_chay = parseInt(document.getElementById('inv-tet-chay').value) || 0;
+        save(); document.getElementById('prodModal').style.display = 'none';
+    }
+
+    function openOrderModal(id=null) {
+        document.getElementById('orderModal').style.display = 'flex';
+        let o = id ? orders.find(x => x.id === id) : null;
+        document.getElementById('order-id').value = id || "";
+        document.getElementById('cust-name').value = o ? o.name : "";
+        document.getElementById('date').value = o ? o.date : "";
+        document.getElementById('note').value = o ? o.note : "";
+        document.getElementById('qty-chung').value = o ? o.chung : 0;
+        document.getElementById('qty-tet').value = o ? o.tet : 0;
+        document.getElementById('qty-chung-chay').value = o ? o.chung_chay : 0;
+        document.getElementById('qty-tet-chay').value = o ? o.tet_chay : 0;
+        document.getElementById('price-chung').value = o ? o.prices.chung : prices.chung;
+        document.getElementById('price-tet').value = o ? o.prices.tet : prices.tet;
+        document.getElementById('price-chay').value = o ? o.prices.chay : prices.chay;
+        calcTotal();
+    }
+
+    function calcTotal() {
+        let qc = document.getElementById('qty-chung').value * document.getElementById('price-chung').value;
+        let qt = document.getElementById('qty-tet').value * document.getElementById('price-tet').value;
+        let qcc = document.getElementById('qty-chung-chay').value * document.getElementById('price-chay').value;
+        let qtc = document.getElementById('qty-tet-chay').value * document.getElementById('price-chay').value;
+        document.getElementById('modal-total').innerText = formatMoney(qc + qt + qcc + qtc);
+    }
+
+    function saveOrder() {
+        let id = document.getElementById('order-id').value;
+        let newO = {
+            id: id ? parseInt(id) : Date.now(),
+            name: document.getElementById('cust-name').value,
+            date: document.getElementById('date').value,
+            note: document.getElementById('note').value,
+            chung: parseInt(document.getElementById('qty-chung').value) || 0,
+            tet: parseInt(document.getElementById('qty-tet').value) || 0,
+            chung_chay: parseInt(document.getElementById('qty-chung-chay').value) || 0,
+            tet_chay: parseInt(document.getElementById('qty-tet-chay').value) || 0,
+            prices: {
+                chung: parseInt(document.getElementById('price-chung').value),
+                tet: parseInt(document.getElementById('price-tet').value),
+                chay: parseInt(document.getElementById('price-chay').value),
+            },
+            isPaid: id ? orders.find(x=>x.id==id).isPaid : false,
+            isDone: id ? orders.find(x=>x.id==id).isDone : false,
+        };
+        
+        if(!newO.name) { alert("Nhập tên khách!"); return; }
+        if(id) { let idx = orders.findIndex(x => x.id == id); orders[idx] = newO; } 
+        else { orders.unshift(newO); }
+        save(); document.getElementById('orderModal').style.display = 'none'; renderTable();
+    }
+
+    function editOrder(id) { openOrderModal(id); }
+    function delOrder(id) { if(confirm("Xóa đơn này?")) { orders = orders.filter(x => x.id !== id); save(); renderTable(); } }
+
+    function copyBill(id) {
+        let o = orders.find(x => x.id === id);
+        let total = (o.chung*o.prices.chung) + (o.tet*o.prices.tet) + ((o.chung_chay+o.tet_chay)*o.prices.chay);
+        let items = [];
+        if(o.chung) items.push(`${o.chung} chưng`);
+        if(o.tet) items.push(`${o.tet} tét`);
+        if(o.chung_chay) items.push(`${o.chung_chay} chưng chay`);
+        if(o.tet_chay) items.push(`${o.tet_chay} tét chay`);
+        let txt = `🧧 Gửi ${o.name},\nBánh chưng Tết: ${items.join(', ')}.\nTổng: ${formatMoney(total)}\nNgày lấy: ${formatDate(o.date)}\n${o.note ? '('+o.note+')' : ''}\nCảm ơn bạn!`;
+        navigator.clipboard.writeText(txt).then(() => alert("Đã copy nội dung!"));
+    }
+
+    function openSettings() {
+        document.getElementById('settingModal').style.display = 'flex';
+        document.getElementById('set-chung').value = prices.chung;
+        document.getElementById('set-tet').value = prices.tet;
+        document.getElementById('set-chay').value = prices.chay;
+    }
+    function saveSettings() {
+        prices.chung = parseInt(document.getElementById('set-chung').value);
+        prices.tet = parseInt(document.getElementById('set-tet').value);
+        prices.chay = parseInt(document.getElementById('set-chay').value);
+        save(); document.getElementById('settingModal').style.display = 'none'; alert("Đã lưu giá mặc định!");
+    }
+    
+    function restoreOriginalData() {
+        if(confirm("Dữ liệu hiện tại sẽ bị xóa và thay thế bằng danh sách gốc. Bạn có chắc chắn?")) {
+            orders = JSON.parse(JSON.stringify(originalData));
+            inventory = { chung: 0, tet: 0, chung_chay: 0, tet_chay: 0 };
+            save();
+            document.getElementById('settingModal').style.display = 'none';
+            renderTable();
+            alert("Đã khôi phục dữ liệu gốc thành công!");
+        }
+    }
+
+    function formatMoney(n) { return n.toLocaleString('vi-VN'); }
+    function formatDate(s) { if(!s) return ''; let [y,m,d] = s.split('-'); return `${d}/${m}`; }
+
+    init();
+</script>
+</body>
+</html>
         
         .btn-add { 
             background: var(--tet-red); 
@@ -627,4 +1062,5 @@
 </script>
 
 </body>
+
 </html>
