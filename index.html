@@ -1,540 +1,66 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản Lý Bếp Bánh Tết 2026</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --tet-red: #d32f2f;
-            --tet-red-bg: #ffebee;
-            --tet-yellow: #fbc02d;
-            --bg-cream: #fffde7;
-            --text-dark: #3e2723;
-            --blue-dark: #1565c0;
-            --blue-bg: #e3f2fd;
-            --green: #2e7d32;
-        }
-
-        * { box-sizing: border-box; font-family: 'Roboto', sans-serif; }
-        
-        body { 
-            margin: 0; background-color: var(--bg-cream); color: var(--text-dark);
-            padding-bottom: 50px;
-        }
-
-        /* Header */
-        header {
-            background: linear-gradient(135deg, var(--tet-red), #b71c1c);
-            color: var(--tet-yellow);
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            position: sticky; top: 0; z-index: 100;
-        }
-        header h1 { font-family: 'Merriweather', serif; margin: 0; font-size: 1.2rem; text-transform: uppercase; }
-        .btn-header { 
-            background: rgba(255,255,255,0.2); border: 1px solid var(--tet-yellow); 
-            color: var(--tet-yellow); padding: 6px 12px; border-radius: 4px; 
-            font-size: 0.85rem; cursor: pointer; transition: 0.2s; margin-left: 5px;
-        }
-        .btn-header:hover { background: var(--tet-yellow); color: var(--tet-red); }
-
-        /* Dashboard Section Title */
-        .section-title {
-            padding: 15px 20px 5px 20px;
-            font-family: 'Merriweather', serif;
-            color: var(--text-dark);
-            border-bottom: 2px solid #eee;
-            margin: 10px 20px;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-
-        /* Dashboard Cards */
-        .dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 15px;
-            padding: 10px 20px;
-        }
-        .card {
-            background: white; padding: 15px; border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-align: center;
-            border-top: 4px solid #ccc;
-        }
-        .card h3 { margin: 0 0 5px 0; font-size: 0.85rem; color: #666; font-weight: normal; }
-        .card .number { font-size: 1.5rem; font-weight: bold; font-family: 'Merriweather', serif; }
-        .card .sub-text { font-size: 0.8rem; color: #888; margin-top: 5px; }
-        
-        .card-delivery { border-top-color: var(--tet-red); background: var(--tet-red-bg); }
-        .card-delivery .number { color: var(--tet-red); }
-        
-        .card-production { border-top-color: var(--blue-dark); background: var(--blue-bg); }
-        .card-production .number { color: var(--blue-dark); }
-        
-        .card-finance { border-top-color: var(--tet-yellow); background: #fff; }
-        .card-finance .number { color: #f57f17; }
-
-        /* Controls */
-        .controls { padding: 10px 20px; display: flex; gap: 10px; flex-wrap: wrap; }
-        input, select, button { padding: 10px; border: 1px solid #ddd; border-radius: 6px; outline: none; }
-        .search-box { flex-grow: 1; }
-        button { cursor: pointer; border: none; font-weight: 600; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .btn-add { background: var(--tet-red); color: white; }
-
-        /* Table */
-        .table-container { background: white; margin: 0 20px; border-radius: 8px; overflow-x: auto; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        table { width: 100%; border-collapse: collapse; min-width: 1100px; }
-        th { background: #eee; padding: 12px; text-align: left; font-weight: bold; color: #444; border-bottom: 2px solid #ccc; }
-        td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
-        
-        tr.done-row { background: #f5f5f5; color: #999; }
-        tr.done-row td { opacity: 0.6; }
-        tr.done-row .font-bold { font-weight: normal; }
-
-        /* Status Buttons */
-        .status-btn { padding: 5px 10px; border-radius: 20px; border: 1px solid #ccc; background: white; cursor: pointer; font-size: 0.75rem; font-weight: bold; width: 100%; display: block; margin-bottom: 4px; transition: all 0.2s;}
-        .status-btn:hover { transform: scale(1.05); }
-        .is-paid { background: #e8f5e9; color: var(--green); border-color: var(--green); }
-        .is-done { background: #424242; color: #fff; border-color: #424242; }
-        .not-done { background: white; color: var(--tet-red); border-color: var(--tet-red); }
-
-        .chay-tag { font-size: 0.8rem; font-weight: bold; color: #7b1fa2; }
-
-        /* Modal */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 2000; }
-        .modal-content { background: white; padding: 25px; border-radius: 8px; width: 95%; max-width: 600px; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
-        .form-row { display: flex; gap: 10px; margin-bottom: 15px; }
-        .form-group { flex: 1; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: 500; }
-        .form-group input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
-        .modal-actions { text-align: right; margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; }
-        .btn-cancel { background: #eee; color: #333; margin-right: 10px; }
-        .btn-save { background: var(--tet-red); color: white; }
-
-        .text-right { text-align: right; }
-        .font-bold { font-weight: bold; }
-        .text-red { color: var(--tet-red); }
-        
-        @media (max-width: 600px) {
-            .dashboard { grid-template-columns: 1fr 1fr; }
-            .form-row { flex-direction: column; gap: 5px; }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#2b1a12" />
+  <title>PGN Vạn Niên - Lịch âm dương Việt Nam</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Imperial+Script&family=Noto+Serif:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root{--ink:#241610;--soft:#684431;--paper:#f6ecd1;--paper2:#ead5a6;--lacquer:#8f241d;--gold:#d8a737;--good:#b11620;--bad:#263a6a;--glass:rgba(255,249,226,.76);--shadow:0 22px 70px rgba(35,20,12,.22);--r:26px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;color:var(--ink);font-family:"Be Vietnam Pro",system-ui,sans-serif;background:radial-gradient(circle at 10% 8%,rgba(216,167,55,.18),transparent 28rem),radial-gradient(circle at 85% 8%,rgba(143,36,29,.13),transparent 26rem),linear-gradient(115deg,rgba(255,255,255,.35) 0 2px,transparent 2px 9px),var(--paper);overflow-x:hidden;padding:92px 18px 102px}
+    body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-3;opacity:.24;background-image:repeating-radial-gradient(circle at 20% 30%,rgba(71,43,26,.13) 0 1px,transparent 1px 5px),repeating-linear-gradient(18deg,rgba(91,65,40,.08) 0 1px,transparent 1px 13px);mix-blend-mode:multiply}body:after{content:"PGN VẠN NIÊN";position:fixed;left:50%;top:46%;transform:translate(-50%,-50%) rotate(-16deg);font-family:"Noto Serif",serif;font-size:clamp(3.4rem,12vw,10rem);font-weight:900;letter-spacing:.12em;color:rgba(71,31,20,.045);white-space:nowrap;pointer-events:none;z-index:-2}
+    ::selection{color:#fff6dc;background:var(--lacquer)}::-webkit-scrollbar{width:18px}::-webkit-scrollbar-track{background:linear-gradient(90deg,#f8edc9,#fff9df 44%,#e7d39d)}::-webkit-scrollbar-thumb{border:4px solid #f7edce;border-radius:999px;background:linear-gradient(90deg,rgba(255,255,255,.55),transparent 30%),repeating-linear-gradient(0deg,transparent 0 32px,rgba(86,55,27,.45) 32px 35px,transparent 35px 70px),linear-gradient(90deg,#dbbd6f,#f3da91,#bf8e32);box-shadow:inset 0 0 7px rgba(68,39,13,.35)}
+    #weatherLayer,.celebration-layer{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:-1}.sunbeam{position:absolute;top:-20vh;right:-15vw;width:48vw;height:140vh;transform:rotate(18deg);background:linear-gradient(90deg,transparent,rgba(255,215,94,.24),transparent);filter:blur(18px);animation:glow 8s ease-in-out infinite alternate}.rain,.snow{position:absolute;top:-40px;animation:fall linear infinite}.rain{width:1px;height:34px;background:linear-gradient(transparent,rgba(59,95,128,.55))}.snow{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.86);box-shadow:0 0 8px #fff}@keyframes fall{to{transform:translate3d(-20px,110vh,0)}}@keyframes glow{from{opacity:.35}to{opacity:.85}}
+    header{position:fixed;top:14px;left:50%;transform:translateX(-50%);width:min(1180px,calc(100% - 28px));z-index:1200;display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px solid rgba(116,68,29,.25);border-radius:999px;background:var(--glass);box-shadow:var(--shadow);backdrop-filter:blur(18px);transition:.42s}header.hidden{transform:translate(-50%,-135%);opacity:.15}.brand{display:flex;align-items:center;gap:10px;margin-right:auto;min-width:0}.brand img{width:48px;height:48px;border-radius:50%;object-fit:cover;box-shadow:0 7px 20px rgba(63,34,18,.32)}h1{margin:0;font:900 clamp(1rem,2vw,1.45rem)/1 "Noto Serif",serif;white-space:nowrap}.brand small{display:block;margin-top:4px;color:var(--soft)}.pill{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;padding:8px 13px;border-radius:999px;border:1px solid rgba(120,71,31,.22);background:rgba(255,255,255,.38);font-weight:800;white-space:nowrap}.bell{width:42px;color:var(--gold);background:linear-gradient(135deg,#5b201a,#9c3428);cursor:pointer}.bell.ring{animation:bell .8s}@keyframes bell{10%,90%{transform:rotate(-12deg)}25%,75%{transform:rotate(12deg)}50%{transform:rotate(-7deg)}}
+    main,footer{width:min(1180px,100%);margin:auto}.page{display:none;animation:pageIn .45s ease both}.page.active{display:block}@keyframes pageIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+    .hero,.panel,.count-card,.support-card{position:relative;border:1px solid rgba(98,57,25,.22);border-radius:var(--r);background:linear-gradient(145deg,rgba(255,255,255,.38),rgba(255,245,207,.16)),rgba(255,248,221,.74);box-shadow:var(--shadow);backdrop-filter:blur(10px)}.hero{min-height:410px;overflow:hidden;padding:clamp(24px,5vw,52px);display:grid;grid-template-columns:minmax(0,1.1fr) minmax(310px,.9fr);gap:28px;align-items:center}.hero:before{content:"";position:absolute;inset:22px;border:2px solid transparent;border-radius:calc(var(--r) - 7px);background:linear-gradient(var(--paper),var(--paper)) padding-box,linear-gradient(115deg,#c99a31,#f7f1bc,#7cc6bd,#d675a2,#f9d66d) border-box;opacity:.55;pointer-events:none}.hero>*{position:relative}.hero h2,.title{margin:0 0 14px;font:900 clamp(1.35rem,3vw,2.1rem)/1.15 "Noto Serif",serif;color:var(--lacquer)}.hero h2{font-size:clamp(2.2rem,7vw,5.6rem);line-height:.98}.calligraphy{font-family:"Imperial Script",cursive;color:#9c2018;font-size:1.5em;font-weight:400}.highlight{color:var(--gold);text-shadow:0 1px 0 rgba(73,34,13,.35);font-weight:900}.copy{font-size:1.04rem;line-height:1.85}.today-card{position:relative;z-index:1;padding:24px;border-radius:24px;background:linear-gradient(180deg,#b72c24,#7f1d18);color:#fff8dc;box-shadow:inset 0 0 0 2px rgba(255,220,119,.34),0 18px 38px rgba(80,28,21,.35);text-align:center}.big-day{display:block;margin:4px 0;font:900 clamp(4.4rem,12vw,8rem)/.9 "Noto Serif",serif}.tags{display:flex;justify-content:center;flex-wrap:wrap;gap:9px;margin-top:12px}.tag{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.2);border:1px solid rgba(255,236,177,.28);font-size:.83rem}.proverb{margin:18px 0 0;padding:18px 20px;border-left:4px solid var(--gold);border-radius:18px;background:rgba(255,255,255,.34);color:var(--soft);font-family:"Noto Serif",serif;font-size:1.05rem;font-style:italic}.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}button,.btn{min-height:42px;padding:11px 17px;border:0;border-radius:999px;font:inherit;font-weight:800;cursor:pointer;color:#381b11;background:linear-gradient(115deg,rgba(255,255,255,.9),rgba(255,255,255,.18),rgba(119,207,211,.45),rgba(239,170,206,.48),rgba(245,218,116,.84)),#e9cc73;background-size:220% 220%;box-shadow:0 9px 20px rgba(78,43,17,.18),inset 0 0 0 1px rgba(255,255,255,.58);transition:.2s}button:hover{transform:translateY(-2px);background-position:100% 0}.ghost{background:rgba(255,248,220,.74);border:1px solid rgba(113,67,27,.25)}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px;margin-top:22px}.panel{padding:22px}.s4{grid-column:span 4}.s5{grid-column:span 5}.s7{grid-column:span 7}.s8{grid-column:span 8}.s12{grid-column:span 12}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stat{padding:16px;border-radius:18px;background:rgba(255,255,255,.38);border:1px solid rgba(110,67,32,.16)}.stat strong{display:block;font:900 clamp(1.7rem,4vw,2.8rem)/1 "Noto Serif",serif;color:var(--lacquer)}.mini{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}.mini div{min-height:36px;display:grid;place-items:center;border-radius:11px;background:rgba(255,255,255,.3);font-size:.86rem;font-weight:800}.mini .today{color:#fff8dc;background:var(--lacquer)}.muted{opacity:.32}.tear{transform-origin:top center;will-change:transform,opacity}.tear.tearing{animation:tearDown .82s ease-in forwards}@keyframes tearDown{0%{transform:rotateX(0);opacity:1;clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}45%{transform:rotateX(22deg) rotate(-2deg);clip-path:polygon(0 0,100% 0,96% 74%,73% 70%,55% 84%,33% 72%,0 86%)}100%{transform:rotate(4deg) translateY(120px);opacity:0;clip-path:polygon(0 0,100% 0,92% 45%,70% 40%,54% 58%,34% 38%,0 55%)}}
+    .toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:18px}select{min-height:44px;padding:9px 14px;border-radius:999px;border:1px solid rgba(100,55,23,.25);background:rgba(255,255,255,.56);color:var(--ink);font:inherit;font-weight:800;outline:0}.cal{display:grid;grid-template-columns:repeat(7,minmax(92px,1fr));gap:10px}.wd{text-align:center;color:var(--lacquer);font:900 1rem "Noto Serif",serif}.day{min-height:126px;padding:10px;border-radius:20px;border:1px solid rgba(101,61,28,.17);background:rgba(255,252,237,.56);cursor:pointer;position:relative;overflow:hidden;transition:.18s;text-align:left;box-shadow:none}.day:hover{transform:translateY(-3px);box-shadow:0 16px 28px rgba(70,39,17,.15)}.day.today{border-color:rgba(177,22,32,.6);box-shadow:inset 0 0 0 2px rgba(177,22,32,.22)}.day.out{opacity:.38}.day.good{background:linear-gradient(160deg,rgba(255,244,218,.8),rgba(255,236,217,.58))}.day.bad{background:linear-gradient(160deg,rgba(245,248,255,.75),rgba(225,232,252,.56))}.solar{font:900 1.75rem/1 "Noto Serif",serif}.lunar{color:var(--soft);font-size:.78rem;font-weight:800}.cell-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}.ctag{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border-radius:999px;padding:3px 7px;font-size:.67rem;font-weight:900;background:rgba(255,255,255,.52);border:1px solid rgba(98,58,26,.15)}.ctag.good{color:var(--good)}.ctag.bad{color:var(--bad)}.ctag.festival{color:#8a2a10;background:rgba(244,206,91,.34)}.details{display:grid;gap:10px;margin:0}.details div{display:flex;justify-content:space-between;gap:16px;padding:11px 0;border-bottom:1px dashed rgba(89,52,22,.22)}dt{color:var(--soft);font-weight:700}dd{margin:0;text-align:right;font-weight:900}
+    .count-layout{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.count-card{padding:22px;overflow:hidden}.count-card.primary{grid-column:span 2;background:radial-gradient(circle at 82% 12%,rgba(216,167,55,.36),transparent 13rem),linear-gradient(145deg,rgba(130,28,22,.95),rgba(64,25,17,.88));color:#fff7d3}.count-card h3{margin:0 0 14px;font:900 1.25rem "Noto Serif",serif}.boxes{display:grid;grid-template-columns:repeat(4,minmax(76px,1fr));gap:12px}.box{aspect-ratio:1/1;border-radius:22px;display:grid;place-items:center;text-align:center;padding:10px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.28);box-shadow:inset 0 0 18px rgba(255,255,255,.1)}.box strong{display:block;font:900 clamp(1.55rem,4vw,3rem)/1 "Noto Serif",serif;font-variant-numeric:tabular-nums}.box span{display:block;margin-top:5px;font-size:clamp(.68rem,1.7vw,.88rem);font-weight:800;white-space:nowrap}.support-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.support-card{padding:24px}.bank{color:var(--lacquer);font:900 1.5rem "Noto Serif",serif}.stk{margin-top:12px;font:900 clamp(1.7rem,4vw,3rem) "Noto Serif",serif;color:var(--gold);text-shadow:0 1px 0 rgba(48,23,12,.38);letter-spacing:.06em}
+    nav{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);width:min(650px,calc(100% - 24px));z-index:1300;display:grid;grid-template-columns:repeat(5,1fr);gap:7px;padding:8px;border-radius:999px;background:rgba(255,246,219,.72);border:1px solid rgba(96,58,24,.24);box-shadow:var(--shadow);backdrop-filter:blur(18px)}.nav-item{display:grid;place-items:center;gap:3px;min-height:54px;border-radius:999px;background:transparent;color:var(--soft);box-shadow:none;font-size:.76rem}.nav-item:hover{transform:none;box-shadow:none}.nav-item.active{color:#fff8dc;background:linear-gradient(135deg,#8f241d,#4b1d14)}.nav-icon{font-size:1.2rem}.toast-wrap{position:fixed;right:18px;top:88px;z-index:4500;display:grid;gap:10px;width:min(360px,calc(100vw - 36px))}.toast{padding:15px 17px;border-radius:20px;background:rgba(58,28,18,.92);color:#fff7dc;box-shadow:var(--shadow);animation:toastIn .35s ease,toastOut .35s ease 5.6s forwards;border:1px solid rgba(255,224,135,.3)}@keyframes toastIn{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}@keyframes toastOut{to{opacity:0;transform:translateY(-10px)}}
+    .modal{position:fixed;inset:0;z-index:5000;display:none;place-items:center;padding:18px;background:rgba(24,14,9,.5);backdrop-filter:blur(8px)}.modal.open{display:grid;animation:fadeIn .24s}.modal-card{width:min(780px,100%);max-height:min(86vh,900px);overflow:auto;padding:24px;border-radius:28px;color:var(--ink);background:linear-gradient(var(--paper),var(--paper)) padding-box,linear-gradient(115deg,#c99a31,#f7f1bc,#7cc6bd,#d675a2,#f9d66d) border-box;border:3px solid transparent;box-shadow:0 40px 100px rgba(0,0,0,.45);animation:popupIn .28s}.modal-head{display:flex;justify-content:space-between;gap:16px;align-items:start}.close{width:42px;min-height:42px;padding:0;border-radius:50%}.story{margin-top:16px;padding:18px;border-radius:22px;background:rgba(143,36,29,.08);border-left:5px solid var(--lacquer);line-height:1.75}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes popupIn{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
+    .celebration{position:fixed;inset:0;z-index:6000;display:none;color:#fff7d0;background:radial-gradient(circle at 50% 80%,#321009,#030101 72%);overflow:hidden;pointer-events:none}.celebration.active{display:block}.ny{position:absolute;left:50%;top:20%;transform:translateX(-50%);width:min(920px,90vw);text-align:center;font:900 clamp(2rem,7vw,5rem) "Noto Serif",serif;text-shadow:0 0 24px rgba(255,196,78,.72);animation:float 9s ease-in-out infinite}@keyframes float{50%{transform:translate(-50%,-18px)}}.lantern,.firework,.wish{position:absolute;pointer-events:none}.lantern{bottom:-80px;width:34px;height:48px;border-radius:50% 50% 45% 45%;background:radial-gradient(circle at 50% 38%,#ffe082,#d52820 62%);box-shadow:0 0 24px rgba(255,162,40,.8);animation:fly 9s linear infinite}.firework{width:6px;height:6px;border-radius:50%;background:#ffe082;box-shadow:32px 0 #f06292,-32px 0 #80deea,0 32px #ffd54f,0 -32px #ff8a65,23px 23px #b2ff59,-23px -23px #ea80fc;animation:boom 1.6s ease-out infinite}.wish{font-family:"Noto Serif",serif;color:#ffe7a1;font-weight:900;animation:wish 8s linear infinite;white-space:nowrap}@keyframes fly{to{transform:translateY(-115vh) translateX(18px);opacity:0}}@keyframes boom{from{transform:scale(.2);opacity:1}to{transform:scale(2.2);opacity:0}}@keyframes wish{from{transform:translateX(105vw)}to{transform:translateX(-120vw)}}footer{margin-top:32px;text-align:center;color:var(--soft);font-weight:700}
+    @media(max-width:940px){body{padding-top:116px}header{border-radius:28px;flex-wrap:wrap}.pill{flex:1}.hero{grid-template-columns:1fr}.s4,.s5,.s7,.s8{grid-column:span 12}.cal{grid-template-columns:repeat(7,minmax(72px,1fr));gap:7px}.day{min-height:106px;padding:8px}.count-layout,.support-grid{grid-template-columns:1fr}.count-card.primary{grid-column:span 1}}@media(max-width:620px){body{padding:126px 10px 94px}.brand small{display:none}.brand img{width:42px;height:42px}.pill{min-height:38px;padding:6px 9px;font-size:.78rem}.hero,.panel,.count-card,.support-card{padding:17px;border-radius:22px}.stats,.boxes{grid-template-columns:repeat(2,1fr)}.cal{grid-template-columns:repeat(7,minmax(42px,1fr));gap:4px}.wd{font-size:.72rem}.day{min-height:82px;border-radius:13px;padding:5px}.solar{font-size:1.22rem}.ctag{display:none}.lunar{font-size:.66rem}nav{border-radius:24px}.nav-item{min-height:48px;font-size:.63rem;padding:7px 3px}}
+  </style>
 </head>
 <body>
-
-<header>
-    <h1><i class="fas fa-gift"></i> Bếp Tết 2026</h1>
-    <div>
-        <button class="btn-header" onclick="openProductionModal()"><i class="fas fa-hammer"></i> Cập nhật Kho</button>
-        <button class="btn-header" onclick="openSettings()"><i class="fas fa-cog"></i></button>
-    </div>
-</header>
-
-<div class="section-title">
-    <span><i class="fas fa-truck"></i> GIAO HÀNG (Cần giao)</span>
-</div>
-<div class="dashboard">
-    <div class="card card-delivery">
-        <h3>Chưng Mặn Cần Giao</h3>
-        <div class="number" id="del-chung">0</div>
-        <div class="sub-text">Tổng đơn: <span id="total-chung-order">0</span></div>
-    </div>
-    <div class="card card-delivery">
-        <h3>Tét Mặn Cần Giao</h3>
-        <div class="number" id="del-tet">0</div>
-        <div class="sub-text">Tổng đơn: <span id="total-tet-order">0</span></div>
-    </div>
-    <div class="card card-delivery" style="background:#f3e5f5; border-top-color:#7b1fa2;">
-        <h3 style="color:#7b1fa2">Chay Cần Giao</h3>
-        <div class="number" style="color:#7b1fa2">
-            <span id="del-chung-chay">0</span> | <span id="del-tet-chay">0</span>
-        </div>
-        <div class="sub-text">Chưng / Tét</div>
-    </div>
-    <div class="card card-finance">
-        <h3>Đã Thu Tiền</h3>
-        <div class="number" id="collected-money">0</div>
-        <div class="sub-text">Doanh thu: <span id="total-money">0</span></div>
-    </div>
-</div>
-
-<div class="section-title">
-    <span><i class="fas fa-fire"></i> SẢN XUẤT (Kho bếp)</span>
-    <span style="font-size: 0.8rem; font-weight: normal; color: #666;">(Nhập số bánh đã gói xong)</span>
-</div>
-<div class="dashboard">
-    <div class="card card-production">
-        <h3>Tiến Độ Chưng Mặn</h3>
-        <div class="number">
-            <span id="prod-wrapped-chung" style="color:var(--green)">0</span> / <span id="prod-total-chung">0</span>
-        </div>
-        <div class="sub-text text-red">Còn thiếu: <span id="prod-missing-chung" class="font-bold">0</span></div>
-    </div>
-    <div class="card card-production">
-        <h3>Tiến Độ Tét Mặn</h3>
-        <div class="number">
-            <span id="prod-wrapped-tet" style="color:var(--green)">0</span> / <span id="prod-total-tet">0</span>
-        </div>
-        <div class="sub-text text-red">Còn thiếu: <span id="prod-missing-tet" class="font-bold">0</span></div>
-    </div>
-    <div class="card card-production">
-        <h3>Tiến Độ Bánh Chay</h3>
-        <div class="number" style="font-size: 1.2rem;">
-            <span id="prod-wrapped-chay">0</span> / <span id="prod-total-chay">0</span>
-        </div>
-        <div class="sub-text">Chưng + Tét</div>
-    </div>
-</div>
-
-<div class="controls">
-    <input type="text" id="search-input" class="search-box" placeholder="Tìm tên khách..." oninput="renderTable()">
-    <select id="filter-done" onchange="renderTable()">
-        <option value="all">Tất cả đơn</option>
-        <option value="pending" selected>Chưa giao (Ưu tiên)</option>
-        <option value="done">Đã giao xong</option>
-    </select>
-    <button class="btn-add" onclick="openOrderModal()"><i class="fas fa-plus"></i> Tạo Đơn Mới</button>
-</div>
-
-<div class="table-container">
-    <table>
-        <thead>
-            <tr>
-                <th width="40">STT</th>
-                <th>Khách Hàng</th>
-                <th class="text-right">Chưng</th>
-                <th class="text-right">Tét</th>
-                <th class="text-right">Chay</th>
-                <th>Ngày lấy</th>
-                <th>Tổng Tiền</th>
-                <th class="text-center" width="100">Trạng Thái</th>
-                <th>Ghi chú</th>
-                <th class="text-right">Thao tác</th>
-            </tr>
-        </thead>
-        <tbody id="table-body">
-            </tbody>
-    </table>
-</div>
-
-<div class="modal" id="orderModal">
-    <div class="modal-content">
-        <h2 id="modal-title">Thông Tin Đơn Hàng</h2>
-        <input type="hidden" id="order-id">
-        <div class="form-group"><label>Tên Khách</label><input type="text" id="cust-name"></div>
-        
-        <div style="background:#f9f9f9; padding:10px; margin:10px 0; border-radius:5px;">
-            <div class="form-row">
-                <div class="form-group"><label>Chưng Mặn</label><input type="number" id="qty-chung" oninput="calcTotal()"></div>
-                <div class="form-group"><label>Giá</label><input type="number" id="price-chung" oninput="calcTotal()"></div>
-            </div>
-            <div class="form-row">
-                <div class="form-group"><label>Tét Mặn</label><input type="number" id="qty-tet" oninput="calcTotal()"></div>
-                <div class="form-group"><label>Giá</label><input type="number" id="price-tet" oninput="calcTotal()"></div>
-            </div>
-            <div class="form-row" style="border-top:1px dashed #ccc; padding-top:10px;">
-                <div class="form-group"><label>Chưng Chay</label><input type="number" id="qty-chung-chay" oninput="calcTotal()"></div>
-                <div class="form-group"><label>Tét Chay</label><input type="number" id="qty-tet-chay" oninput="calcTotal()"></div>
-                <div class="form-group"><label>Giá Chay</label><input type="number" id="price-chay" oninput="calcTotal()"></div>
-            </div>
-            <div class="text-right font-bold text-red">Tổng: <span id="modal-total">0</span> đ</div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group"><label>Ngày lấy</label><input type="date" id="date"></div>
-            <div class="form-group"><label>Ghi chú</label><input type="text" id="note"></div>
-        </div>
-
-        <div class="modal-actions">
-            <button class="btn-cancel" onclick="document.getElementById('orderModal').style.display='none'">Hủy</button>
-            <button class="btn-save" onclick="saveOrder()">Lưu Đơn</button>
-        </div>
-    </div>
-</div>
-
-<div class="modal" id="prodModal">
-    <div class="modal-content" style="max-width:400px">
-        <h2><i class="fas fa-hammer"></i> Cập Nhật Kho Bánh</h2>
-        <p style="font-size:0.9rem; color:#666">Nhập tổng số lượng bánh đã gói xong (đã luộc) hiện có trong kho.</p>
-        <div class="form-group"><label style="color:var(--tet-red)">Kho Chưng Mặn</label><input type="number" id="inv-chung" style="font-weight:bold; color:var(--tet-red)"></div>
-        <div class="form-group"><label style="color:var(--blue-dark)">Kho Tét Mặn</label><input type="number" id="inv-tet" style="font-weight:bold; color:var(--blue-dark)"></div>
-        <div class="form-row">
-            <div class="form-group"><label>Kho Chưng Chay</label><input type="number" id="inv-chung-chay"></div>
-            <div class="form-group"><label>Kho Tét Chay</label><input type="number" id="inv-tet-chay"></div>
-        </div>
-        <div class="modal-actions">
-            <button class="btn-cancel" onclick="document.getElementById('prodModal').style.display='none'">Đóng</button>
-            <button class="btn-save" onclick="saveProduction()">Cập nhật</button>
-        </div>
-    </div>
-</div>
-
-<div class="modal" id="settingModal">
-    <div class="modal-content" style="max-width:400px">
-        <h2>Cài Đặt & Dữ Liệu</h2>
-        <div class="form-group"><label>Giá Chưng Mặn</label><input type="number" id="set-chung"></div>
-        <div class="form-group"><label>Giá Tét Mặn</label><input type="number" id="set-tet"></div>
-        <div class="form-group"><label>Giá Bánh Chay</label><input type="number" id="set-chay"></div>
-        <div class="modal-actions">
-            <button class="btn-cancel" onclick="restoreOriginalData()" style="float:left; background:#d32f2f; color:white">Khôi phục Dữ liệu Gốc</button>
-            <button class="btn-save" onclick="saveSettings()">Lưu Giá</button>
-        </div>
-    </div>
-</div>
-
-<script>
-    // Dữ liệu gốc từ File Excel
-    const originalData = [{"id": 1, "name": "Vân Mạnh", "chung": 2, "tet": 2, "chung_chay": 1, "tet_chay": 0, "date": "2026-12-28", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 2, "name": "Thương(M.Nguyên)", "chung": 2, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 3, "name": "C.Thanh(Toàn)", "chung": 4, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-29", "note": "80k(Nhiều nhân) (Đã trả tiền)", "isPaid": true, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 4, "name": "Dung Bình", "chung": 2, "tet": 1, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "bánh tết +120k bánh ông táo", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 5, "name": "Thảo(Trường Huy)", "chung": 8, "tet": 2, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "ít đậu (2 cái chưa thanh toán)", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 6, "name": "Mẹ Vương Anh", "chung": 2, "tet": 2, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-28", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 7, "name": "A.Lực(Bà Lục)", "chung": 8, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 8, "name": "Cô Lan(MNHS)", "chung": 12, "tet": 1, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-28", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 9, "name": "Tâm tin", "chung": 6, "tet": 6, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 10, "name": "C Vân Lương", "chung": 2, "tet": 1, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 11, "name": "Mự Hưng", "chung": 24, "tet": 3, "chung_chay": 4, "tet_chay": 0, "date": "2026-12-27", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 12, "name": "C Cúc Mận", "chung": 4, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 13, "name": "C Việt", "chung": 4, "tet": 1, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 14, "name": "C Liên Linh", "chung": 20, "tet": 0, "chung_chay": 2, "tet_chay": 0, "date": "2026-12-29", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 15, "name": "Hằng (MNHS)", "chung": 4, "tet": 6, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "1 chưng nhỏ + tét không đậu (Đã  trả tiền)", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 16, "name": "C Liễu bánh", "chung": 4, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 17, "name": "Hoài An", "chung": 5, "tet": 2, "chung_chay": 3, "tet_chay": 0, "date": "2026-12-28", "note": "80k (Nhiều nhân)", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 18, "name": "C Hà Anh", "chung": 6, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-28", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 19, "name": "C Ngân(Huy)", "chung": 22, "tet": 12, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-28", "note": "80k (ít đậu)", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 20, "name": "C Huệ(THHS)", "chung": 6, "tet": 2, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-28", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 21, "name": "C Loan", "chung": 6, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-28", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 22, "name": "C Mai Hoa", "chung": 2, "tet": 1, "chung_chay": 1, "tet_chay": 0, "date": "2026-12-28", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 23, "name": "C Huệ Văn", "chung": 4, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-28", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 24, "name": "C Nga Tính", "chung": 8, "tet": 2, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-27", "note": "60k (bánh nhỏ)", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 25, "name": "Vân Đạo", "chung": 2, "tet": 2, "chung_chay": 4, "tet_chay": 0, "date": "2026-12-28", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 26, "name": "C Yến Chuối", "chung": 7, "tet": 6, "chung_chay": 11, "tet_chay": 0, "date": "2026-12-28", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 27, "name": "32 Ngô Đức Kế", "chung": 8, "tet": 1, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "Bánh chưng nhỏ", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 28, "name": "B Hương Cát", "chung": 18, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-28", "note": "Đã trả tiền", "isPaid": true, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 29, "name": "Mẹ Quang Tuấn", "chung": 5, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-28", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 30, "name": "C Vinh", "chung": 2, "tet": 0, "chung_chay": 2, "tet_chay": 0, "date": "", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 31, "name": "Dì Huệ", "chung": 2, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 32, "name": "Cô Dương", "chung": 10, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-28", "note": "26/12 lấy 6 bánh", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 33, "name": "A Lợi", "chung": 4, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "Ít đậu", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 34, "name": "C Liên (Hằng Vy)", "chung": 6, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-27", "note": "ít đậu", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 35, "name": "Đào Hà", "chung": 2, "tet": 2, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-28", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 36, "name": "Giang (Mẹ Bảo Nam)", "chung": 1, "tet": 2, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 37, "name": "Cô Soa", "chung": 5, "tet": 1, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-29", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 38, "name": "Thầy Hùng Thể", "chung": 6, "tet": 4, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-27", "note": "Bánh 80k", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 39, "name": "Quỳnh Khánh", "chung": 8, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-29", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 40, "name": "Bà Phương dưa cá", "chung": 8, "tet": 4, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-28", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 41, "name": "Hương Châu", "chung": 2, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 42, "name": "C Hiền MNHS", "chung": 1, "tet": 1, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 43, "name": "Bà Phụng", "chung": 16, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "80k(Nhiều đậu)", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 44, "name": "Thanh cò", "chung": 4, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-29", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 45, "name": "C Thanh(Yến Chuối)", "chung": 0, "tet": 0, "chung_chay": 10, "tet_chay": 4, "date": "", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 46, "name": "Bà Mai thịt", "chung": 3, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-29", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 47, "name": "Mẹ Đ.Anh", "chung": 7, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-28", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 48, "name": "O Thành", "chung": 5, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "", "note": "Tính tiền 7 cái", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}, {"id": 49, "name": "C Quỳnh", "chung": 4, "tet": 0, "chung_chay": 0, "tet_chay": 0, "date": "2026-12-29", "note": "", "isPaid": false, "isDone": false, "prices": {"chung": 60000, "tet": 50000, "chay": 30000}}];
-
-    let orders = [];
-    let prices = { chung: 60000, tet: 50000, chay: 30000 };
-    let inventory = { chung: 0, tet: 0, chung_chay: 0, tet_chay: 0 }; 
-
-    function init() {
-        const dOrders = localStorage.getItem('tet2026_final_orders');
-        const dPrices = localStorage.getItem('tet2026_final_prices');
-        const dInv = localStorage.getItem('tet2026_final_inventory');
-
-        if(dOrders) {
-            orders = JSON.parse(dOrders);
-        } else {
-            // Lần đầu chạy -> Nạp dữ liệu gốc
-            orders = JSON.parse(JSON.stringify(originalData));
-            save();
-        }
-
-        if(dPrices) prices = JSON.parse(dPrices);
-        if(dInv) inventory = JSON.parse(dInv);
-
-        renderTable();
-        updateStats();
-    }
-
-    function save() {
-        localStorage.setItem('tet2026_final_orders', JSON.stringify(orders));
-        localStorage.setItem('tet2026_final_prices', JSON.stringify(prices));
-        localStorage.setItem('tet2026_final_inventory', JSON.stringify(inventory));
-        updateStats();
-    }
-
-    function updateStats() {
-        let total = { chung: 0, tet: 0, chung_chay: 0, tet_chay: 0, revenue: 0, collected: 0 };
-        let remaining = { chung: 0, tet: 0, chung_chay: 0, tet_chay: 0 };
-
-        orders.forEach(o => {
-            total.chung += o.chung;
-            total.tet += o.tet;
-            total.chung_chay += o.chung_chay;
-            total.tet_chay += o.tet_chay;
-            
-            let money = (o.chung * o.prices.chung) + (o.tet * o.prices.tet) + ((o.chung_chay + o.tet_chay) * o.prices.chay);
-            total.revenue += money;
-            if(o.isPaid) total.collected += money;
-
-            if(!o.isDone) {
-                remaining.chung += o.chung;
-                remaining.tet += o.tet;
-                remaining.chung_chay += o.chung_chay;
-                remaining.tet_chay += o.tet_chay;
-            }
-        });
-
-        // Dashboard Sales
-        document.getElementById('del-chung').innerText = remaining.chung;
-        document.getElementById('total-chung-order').innerText = total.chung;
-        document.getElementById('del-tet').innerText = remaining.tet;
-        document.getElementById('total-tet-order').innerText = total.tet;
-        document.getElementById('del-chung-chay').innerText = remaining.chung_chay;
-        document.getElementById('del-tet-chay').innerText = remaining.tet_chay;
-        document.getElementById('collected-money').innerText = formatMoney(total.collected);
-        document.getElementById('total-money').innerText = formatMoney(total.revenue);
-
-        // Dashboard Production
-        document.getElementById('prod-wrapped-chung').innerText = inventory.chung;
-        document.getElementById('prod-total-chung').innerText = total.chung;
-        let missingChung = total.chung - inventory.chung;
-        document.getElementById('prod-missing-chung').innerText = missingChung > 0 ? missingChung : "Đủ";
-        
-        document.getElementById('prod-wrapped-tet').innerText = inventory.tet;
-        document.getElementById('prod-total-tet').innerText = total.tet;
-        let missingTet = total.tet - inventory.tet;
-        document.getElementById('prod-missing-tet').innerText = missingTet > 0 ? missingTet : "Đủ";
-
-        let totalChay = total.chung_chay + total.tet_chay;
-        let invChay = inventory.chung_chay + inventory.tet_chay;
-        document.getElementById('prod-wrapped-chay').innerText = invChay;
-        document.getElementById('prod-total-chay').innerText = totalChay;
-    }
-
-    function renderTable() {
-        const tbody = document.getElementById('table-body');
-        const search = document.getElementById('search-input').value.toLowerCase();
-        const filter = document.getElementById('filter-done').value;
-        
-        tbody.innerHTML = '';
-
-        orders.forEach((o, idx) => {
-            if(search && !o.name.toLowerCase().includes(search) && !o.note.toLowerCase().includes(search)) return;
-            if(filter === 'pending' && o.isDone) return;
-            if(filter === 'done' && !o.isDone) return;
-
-            let money = (o.chung * o.prices.chung) + (o.tet * o.prices.tet) + ((o.chung_chay + o.tet_chay) * o.prices.chay);
-            let chayTxt = (o.chung_chay || o.tet_chay) ? `<span class="chay-tag">${o.chung_chay}C | ${o.tet_chay}T</span>` : '-';
-            
-            let tr = document.createElement('tr');
-            if(o.isDone) tr.className = 'done-row';
-
-            tr.innerHTML = `
-                <td>${idx+1}</td>
-                <td class="font-bold">${o.name}</td>
-                <td class="text-right">${o.chung||'-'}</td>
-                <td class="text-right">${o.tet||'-'}</td>
-                <td class="text-right">${chayTxt}</td>
-                <td>${formatDate(o.date)}</td>
-                <td class="font-bold text-red">${formatMoney(money)}</td>
-                <td>
-                    <button class="status-btn ${o.isPaid?'is-paid':'not-done'}" onclick="togglePaid(${o.id})">
-                        ${o.isPaid ? 'Đã thu tiền' : 'Chưa thu'}
-                    </button>
-                    <button class="status-btn ${o.isDone?'is-done':'not-done'}" onclick="toggleDone(${o.id})">
-                        ${o.isDone ? 'Đã giao' : 'Chưa giao'}
-                    </button>
-                </td>
-                <td style="font-size:0.85rem">${o.note}</td>
-                <td class="text-right">
-                    <button onclick="copyBill(${o.id})" title="Copy bill" style="color:#1976d2; background:none; border:none; font-size:1.1rem; cursor:pointer"><i class="fas fa-copy"></i></button>
-                    <button onclick="editOrder(${o.id})" style="color:#333; background:none; border:none; font-size:1.1rem; cursor:pointer"><i class="fas fa-pen"></i></button>
-                    <button onclick="delOrder(${o.id})" style="color:#d32f2f; background:none; border:none; font-size:1.1rem; cursor:pointer"><i class="fas fa-trash"></i></button>
-                </td>
-            `;
-            tbody.appendChild(tr);
-        });
-    }
-
-    function togglePaid(id) {
-        let o = orders.find(x => x.id === id); o.isPaid = !o.isPaid; save(); renderTable();
-    }
-    
-    function toggleDone(id) {
-        let o = orders.find(x => x.id === id); o.isDone = !o.isDone; save(); renderTable();
-    }
-
-    function openProductionModal() {
-        document.getElementById('prodModal').style.display = 'flex';
-        document.getElementById('inv-chung').value = inventory.chung;
-        document.getElementById('inv-tet').value = inventory.tet;
-        document.getElementById('inv-chung-chay').value = inventory.chung_chay;
-        document.getElementById('inv-tet-chay').value = inventory.tet_chay;
-    }
-
-    function saveProduction() {
-        inventory.chung = parseInt(document.getElementById('inv-chung').value) || 0;
-        inventory.tet = parseInt(document.getElementById('inv-tet').value) || 0;
-        inventory.chung_chay = parseInt(document.getElementById('inv-chung-chay').value) || 0;
-        inventory.tet_chay = parseInt(document.getElementById('inv-tet-chay').value) || 0;
-        save(); document.getElementById('prodModal').style.display = 'none';
-    }
-
-    function openOrderModal(id=null) {
-        document.getElementById('orderModal').style.display = 'flex';
-        let o = id ? orders.find(x => x.id === id) : null;
-        document.getElementById('order-id').value = id || "";
-        document.getElementById('cust-name').value = o ? o.name : "";
-        document.getElementById('date').value = o ? o.date : "";
-        document.getElementById('note').value = o ? o.note : "";
-        document.getElementById('qty-chung').value = o ? o.chung : 0;
-        document.getElementById('qty-tet').value = o ? o.tet : 0;
-        document.getElementById('qty-chung-chay').value = o ? o.chung_chay : 0;
-        document.getElementById('qty-tet-chay').value = o ? o.tet_chay : 0;
-        document.getElementById('price-chung').value = o ? o.prices.chung : prices.chung;
-        document.getElementById('price-tet').value = o ? o.prices.tet : prices.tet;
-        document.getElementById('price-chay').value = o ? o.prices.chay : prices.chay;
-        calcTotal();
-    }
-
-    function calcTotal() {
-        let qc = document.getElementById('qty-chung').value * document.getElementById('price-chung').value;
-        let qt = document.getElementById('qty-tet').value * document.getElementById('price-tet').value;
-        let qcc = document.getElementById('qty-chung-chay').value * document.getElementById('price-chay').value;
-        let qtc = document.getElementById('qty-tet-chay').value * document.getElementById('price-chay').value;
-        document.getElementById('modal-total').innerText = formatMoney(qc + qt + qcc + qtc);
-    }
-
-    function saveOrder() {
-        let id = document.getElementById('order-id').value;
-        let newO = {
-            id: id ? parseInt(id) : Date.now(),
-            name: document.getElementById('cust-name').value,
-            date: document.getElementById('date').value,
-            note: document.getElementById('note').value,
-            chung: parseInt(document.getElementById('qty-chung').value) || 0,
-            tet: parseInt(document.getElementById('qty-tet').value) || 0,
-            chung_chay: parseInt(document.getElementById('qty-chung-chay').value) || 0,
-            tet_chay: parseInt(document.getElementById('qty-tet-chay').value) || 0,
-            prices: {
-                chung: parseInt(document.getElementById('price-chung').value),
-                tet: parseInt(document.getElementById('price-tet').value),
-                chay: parseInt(document.getElementById('price-chay').value),
-            },
-            isPaid: id ? orders.find(x=>x.id==id).isPaid : false,
-            isDone: id ? orders.find(x=>x.id==id).isDone : false,
-        };
-        
-        if(!newO.name) { alert("Nhập tên khách!"); return; }
-        if(id) { let idx = orders.findIndex(x => x.id == id); orders[idx] = newO; } 
-        else { orders.unshift(newO); }
-        save(); document.getElementById('orderModal').style.display = 'none'; renderTable();
-    }
-
-    function editOrder(id) { openOrderModal(id); }
-    function delOrder(id) { if(confirm("Xóa đơn này?")) { orders = orders.filter(x => x.id !== id); save(); renderTable(); } }
-
-    function copyBill(id) {
-        let o = orders.find(x => x.id === id);
-        let total = (o.chung*o.prices.chung) + (o.tet*o.prices.tet) + ((o.chung_chay+o.tet_chay)*o.prices.chay);
-        let items = [];
-        if(o.chung) items.push(`${o.chung} chưng`);
-        if(o.tet) items.push(`${o.tet} tét`);
-        if(o.chung_chay) items.push(`${o.chung_chay} chưng chay`);
-        if(o.tet_chay) items.push(`${o.tet_chay} tét chay`);
-        let txt = `🧧 Gửi ${o.name},\nBánh chưng Tết: ${items.join(', ')}.\nTổng: ${formatMoney(total)}\nNgày lấy: ${formatDate(o.date)}\n${o.note ? '('+o.note+')' : ''}\nCảm ơn bạn!`;
-        navigator.clipboard.writeText(txt).then(() => alert("Đã copy nội dung!"));
-    }
-
-    function openSettings() {
-        document.getElementById('settingModal').style.display = 'flex';
-        document.getElementById('set-chung').value = prices.chung;
-        document.getElementById('set-tet').value = prices.tet;
-        document.getElementById('set-chay').value = prices.chay;
-    }
-    function saveSettings() {
-        prices.chung = parseInt(document.getElementById('set-chung').value);
-        prices.tet = parseInt(document.getElementById('set-tet').value);
-        prices.chay = parseInt(document.getElementById('set-chay').value);
-        save(); document.getElementById('settingModal').style.display = 'none'; alert("Đã lưu giá mặc định!");
-    }
-    
-    function restoreOriginalData() {
-        if(confirm("Dữ liệu hiện tại sẽ bị xóa và thay thế bằng danh sách gốc. Bạn có chắc chắn?")) {
-            orders = JSON.parse(JSON.stringify(originalData));
-            inventory = { chung: 0, tet: 0, chung_chay: 0, tet_chay: 0 };
-            save();
-            document.getElementById('settingModal').style.display = 'none';
-            renderTable();
-            alert("Đã khôi phục dữ liệu gốc thành công!");
-        }
-    }
-
-    function formatMoney(n) { return n.toLocaleString('vi-VN'); }
-    function formatDate(s) { if(!s) return ''; let [y,m,d] = s.split('-'); return `${d}/${m}`; }
-
-    init();
-</script>
+  <div id="weatherLayer"></div>
+  <header id="header"><div class="brand"><img src="https://files.catbox.moe/yto4un.png" alt="Logo PGN"><div><h1>PGN Vạn Niên</h1><small>Giấy dó · Mực nghiên · Lịch Việt</small></div></div><button id="bell" class="pill bell" title="Chuông giờ hoàng đạo">🔔</button><div id="time" class="pill">--:--:--</div><div id="weather" class="pill">Đang xem thời tiết...</div></header>
+  <main>
+    <section id="home" class="page active"><div class="hero"><div><h2><span class="calligraphy">Lịch</span><br>Vạn Niên <span class="highlight">Việt Nam</span></h2><p class="copy">Tra cứu âm dương, can chi, tiết khí, ngũ hành, giờ hoàng đạo, ngày tốt xấu và câu ca dao mỗi ngày.</p><div id="proverb" class="proverb"></div><div class="actions"><button id="share">Chia sẻ lịch hôm nay</button><button id="goToday" class="ghost">Về hôm nay</button></div></div><article id="todayCard" class="today-card tear"></article></div><div class="grid"><section class="panel s8"><h2 class="title">Lịch tháng này</h2><div id="mini" class="mini"></div></section><section class="panel s4"><h2 class="title">Còn lại trong năm</h2><div class="stats"><div class="stat"><strong id="solarLeft">--</strong><span>Dương lịch</span></div><div class="stat"><strong id="lunarLeft">--</strong><span>Âm lịch</span></div><div class="stat"><strong id="nearestLeft">--</strong><span>Đến lễ gần nhất</span></div></div></section><section class="panel s12"><h2 class="title">Lịch block treo tường</h2><div class="grid" style="margin-top:0"><div class="s5"><article id="blockCard" class="today-card tear"></article><div class="actions"><button id="nextBlock">Ngày tiếp theo</button><button id="resetBlock" class="ghost">Quay lại hôm nay</button></div></div><div class="s7"><dl id="homeDetail" class="details"></dl></div></div></section></div></section>
+    <section id="calendar" class="page"><section class="panel"><div class="toolbar"><div><h2 class="title" style="margin-bottom:4px">Lịch vạn niên</h2><div id="calSub">Bảng lịch âm dương tổng hợp</div></div><div class="actions" style="margin-top:0"><select id="month"></select><select id="year"></select><button id="todayCal">Về hôm nay</button></div></div><div id="cal" class="cal"></div></section><section class="panel" style="margin-top:18px"><h2 class="title">Chi tiết ngày đang chọn</h2><dl id="selectedDetail" class="details"></dl></section></section>
+    <section id="countdown" class="page"><div class="count-layout"><article class="count-card primary"><h2 class="title" style="color:#ffe6a1">Đếm ngược Tết Nguyên Đán</h2><p id="tetLabel"></p><div id="tetCount" class="boxes"></div></article><article class="count-card"><h3>Tết Dương lịch</h3><div id="nyCount" class="boxes"></div></article><article class="count-card"><h3>Ngày lễ gần nhất</h3><p id="holidayLabel"></p><div id="holidayCount" class="boxes"></div></article></div></section>
+    <section id="about" class="page"><section class="panel"><h2 class="title">Giới thiệu</h2><div class="copy"><p><strong class="highlight">PGN</strong> Vạn Niên là trang web lịch treo tường số lấy cảm hứng từ giấy dó, mực nghiên và mỹ thuật truyền thống <strong class="highlight">Việt Nam</strong>.</p><p>Trang tổng hợp lịch dương, lịch âm, can chi, ngũ hành, tiết khí, ngày tốt xấu, giờ hoàng đạo, đếm ngược Tết, thời tiết hiện tại, câu ca dao mỗi ngày và câu chuyện dân gian quanh các ngày lễ.</p><p>Ý tưởng và code bởi <strong class="highlight">Nguyễn Hoàng Nam</strong>. Những chữ <strong class="highlight">Việt Nam</strong>, <strong class="highlight">Nguyễn Hoàng Nam</strong> và <strong class="highlight">PGN</strong> được nhấn vàng như nét khảm trai.</p><p>Giao diện linh hoạt cho laptop, PC, Android, iOS, Smart TV; có navbar glass, watermark, popup fade, toast tự ẩn, hiệu ứng thời tiết, chuông giờ hoàng đạo và thanh cuộn dáng tre.</p></div></section></section>
+    <section id="support" class="page"><section class="panel"><h2 class="title">Ủng hộ PGN Vạn Niên</h2><p class="copy">Nếu bạn yêu thích dự án, có thể ủng hộ để trang tiếp tục hoàn thiện dữ liệu lịch Việt và trải nghiệm mỹ thuật truyền thống.</p><div class="support-grid"><article class="support-card"><div class="bank">LPBank</div><p>Chủ tài khoản: <strong>Nguyễn Hoàng Nam</strong></p><div class="stk">6078238888</div></article><article class="support-card"><div class="bank">TechcomBank</div><p>Chủ tài khoản: <strong>Nguyễn Hoàng Nam</strong></p><div class="stk">9013838888</div></article></div></section></section>
+  </main>
+  <footer>© <span id="copyYear"></span> PGN Vạn Niên · Bản quyền thuộc về Nam Nguyen</footer>
+  <nav aria-label="Điều hướng chính"><button class="nav-item active" data-page="home"><span class="nav-icon">⌂</span>Trang chủ</button><button class="nav-item" data-page="calendar"><span class="nav-icon">☯</span>Lịch vạn niên</button><button class="nav-item" data-page="countdown"><span class="nav-icon">⏳</span>Đếm ngược</button><button class="nav-item" data-page="about"><span class="nav-icon">❖</span>Giới thiệu</button><button class="nav-item" data-page="support"><span class="nav-icon">♥</span>Ủng hộ</button></nav>
+  <div id="toasts" class="toast-wrap" aria-live="polite"></div><div id="modal" class="modal" role="dialog" aria-modal="true"><div class="modal-card"><div class="modal-head"><div><h2 id="modalTitle" class="title" style="margin-bottom:3px"></h2><div id="modalSub"></div></div><button id="close" class="close">×</button></div><dl id="modalDetail" class="details"></dl><div id="story" class="story" hidden></div></div></div>
+  <div id="celebration" class="celebration" aria-hidden="true"><div class="ny">Chúc Mừng Năm Mới · An Khang Thịnh Vượng</div><div id="celeLayer" class="celebration-layer"></div></div>
+  <script>
+    const CAN=["Giáp","Ất","Bính","Đinh","Mậu","Kỷ","Canh","Tân","Nhâm","Quý"],CHI=["Tý","Sửu","Dần","Mão","Thìn","Tỵ","Ngọ","Mùi","Thân","Dậu","Tuất","Hợi"],WD=["Chủ nhật","Thứ hai","Thứ ba","Thứ tư","Thứ năm","Thứ sáu","Thứ bảy"],MS=86400000,TZ=7,$=id=>document.getElementById(id);
+    const NAP=["Hải Trung Kim","Lư Trung Hỏa","Đại Lâm Mộc","Lộ Bàng Thổ","Kiếm Phong Kim","Sơn Đầu Hỏa","Giản Hạ Thủy","Thành Đầu Thổ","Bạch Lạp Kim","Dương Liễu Mộc","Tuyền Trung Thủy","Ốc Thượng Thổ","Tích Lịch Hỏa","Tùng Bách Mộc","Trường Lưu Thủy","Sa Trung Kim","Sơn Hạ Hỏa","Bình Địa Mộc","Bích Thượng Thổ","Kim Bạch Kim","Phúc Đăng Hỏa","Thiên Hà Thủy","Đại Trạch Thổ","Thoa Xuyến Kim","Tang Đố Mộc","Đại Khê Thủy","Sa Trung Thổ","Thiên Thượng Hỏa","Thạch Lựu Mộc","Đại Hải Thủy"];
+    const PRO=["Ăn quả nhớ kẻ trồng cây.","Có công mài sắt, có ngày nên kim.","Một cây làm chẳng nên non, ba cây chụm lại nên hòn núi cao.","Nhiễu điều phủ lấy giá gương, người trong một nước phải thương nhau cùng.","Đi một ngày đàng, học một sàng khôn.","Uống nước nhớ nguồn.","Lá lành đùm lá rách.","Tốt gỗ hơn tốt nước sơn.","Bầu ơi thương lấy bí cùng, tuy rằng khác giống nhưng chung một giàn.","Chớ thấy sóng cả mà ngã tay chèo.","Gần mực thì đen, gần đèn thì sáng.","Thất bại là mẹ thành công.","Tiên học lễ, hậu học văn.","Đất lành chim đậu.","Đói cho sạch, rách cho thơm.","Cái nết đánh chết cái đẹp.","Lời nói chẳng mất tiền mua, lựa lời mà nói cho vừa lòng nhau.","Công cha như núi Thái Sơn, nghĩa mẹ như nước trong nguồn chảy ra.","Muốn sang thì bắc cầu kiều, muốn con hay chữ thì yêu lấy thầy.","Thuận vợ thuận chồng tát biển Đông cũng cạn.","Ở hiền gặp lành.","Có chí thì nên.","Tre già măng mọc.","Giấy rách phải giữ lấy lề."];
+    const TERMS=[["01-05","Tiểu Hàn"],["01-20","Đại Hàn"],["02-04","Lập Xuân"],["02-19","Vũ Thủy"],["03-06","Kinh Trập"],["03-21","Xuân Phân"],["04-05","Thanh Minh"],["04-20","Cốc Vũ"],["05-06","Lập Hạ"],["05-21","Tiểu Mãn"],["06-06","Mang Chủng"],["06-21","Hạ Chí"],["07-07","Tiểu Thử"],["07-23","Đại Thử"],["08-08","Lập Thu"],["08-23","Xử Thử"],["09-08","Bạch Lộ"],["09-23","Thu Phân"],["10-08","Hàn Lộ"],["10-23","Sương Giáng"],["11-07","Lập Đông"],["11-22","Tiểu Tuyết"],["12-07","Đại Tuyết"],["12-22","Đông Chí"]];
+    const SH={"01-01":["Tết Dương lịch","Ngày đầu năm dương lịch hiện đại, đánh dấu chu kỳ mới trong giao thương, học tập và công việc.","Gia đình Việt thường sum họp nhỏ, dọn dẹp bàn làm việc và gửi lời chúc bình an."],"02-03":["Ngày thành lập Đảng Cộng sản Việt Nam","Ngày 03/02/1930 gắn với sự ra đời của Đảng Cộng sản Việt Nam.","Dịp tưởng nhớ những mốc son lịch sử và tinh thần đoàn kết dân tộc."],"02-14":["Lễ Tình nhân","Ngày Valentine du nhập từ phương Tây, nay là dịp bày tỏ tình cảm.","Người trẻ thường tặng hoa, thiệp, chocolate và gửi lời yêu thương."],"03-08":["Ngày Quốc tế Phụ nữ","Ngày tôn vinh phụ nữ trên thế giới.","Gia đình gửi hoa, lời chúc và sự quan tâm đặc biệt cho phụ nữ."],"04-30":["Ngày Giải phóng miền Nam","Ngày 30/04/1975 đánh dấu mốc thống nhất đất nước.","Nhiều gia đình treo cờ, về quê, thăm di tích hoặc kể chuyện lịch sử."],"05-01":["Ngày Quốc tế Lao động","Ngày tôn vinh người lao động.","Dịp nghỉ ngơi sau mùa làm việc đầu năm."],"06-01":["Tết Thiếu nhi","Ngày nhắc nhớ quyền được yêu thương, học tập và vui chơi của trẻ em.","Trẻ nhỏ thường được nhận quà, đi chơi, xem múa lân hoặc tham gia hoạt động cộng đồng."],"09-02":["Quốc khánh Việt Nam","Ngày 02/09/1945, Chủ tịch Hồ Chí Minh đọc Tuyên ngôn Độc lập tại Ba Đình.","Người dân treo cờ Tổ quốc và nghe lại chuyện ngày độc lập."],"10-20":["Ngày Phụ nữ Việt Nam","Ngày thành lập Hội Liên hiệp Phụ nữ Việt Nam.","Dịp tri ân bà, mẹ, cô giáo, đồng nghiệp nữ và những người phụ nữ thân yêu."],"11-20":["Ngày Nhà giáo Việt Nam","Ngày tôn vinh nghề giáo và truyền thống tôn sư trọng đạo.","Học trò thăm thầy cô, tặng hoa, viết thiệp và kể kỷ niệm mái trường."],"12-24":["Đêm Giáng sinh","Dịp lễ Giáng sinh của cộng đồng Công giáo, nay cũng là ngày hội văn hóa cuối năm.","Nhiều nơi trang trí đèn, hang đá, cây thông và trao lời chúc an lành."]};
+    const LH={"1-1":["Tết Nguyên Đán","Tết Nguyên Đán là ngày đầu năm âm lịch, lễ lớn nhất trong văn hóa Việt.","Người Việt dựng cây nêu, gói bánh chưng bánh tét, xông đất, mừng tuổi và cầu năm mới hanh thông."],"1-15":["Rằm tháng Giêng","Còn gọi là Tết Nguyên Tiêu, ngày rằm đầu tiên của năm âm lịch.","Dân gian có câu: Lễ Phật quanh năm không bằng Rằm tháng Giêng."],"3-10":["Giỗ Tổ Hùng Vương","Ngày tưởng nhớ các Vua Hùng, những người có công dựng nước Văn Lang.","Người Việt hướng về cội nguồn và nhắc nhau câu Dù ai đi ngược về xuôi..."],"4-15":["Lễ Phật Đản","Ngày kỷ niệm Đức Phật đản sinh.","Nhiều nơi tắm Phật, thả hoa đăng, ăn chay và làm việc thiện."],"5-5":["Tết Đoan Ngọ","Còn gọi là Tết diệt sâu bọ, diễn ra giữa năm âm lịch.","Dân gian ăn cơm rượu nếp, trái cây chua, bánh tro để cầu khỏe mạnh."],"7-15":["Lễ Vu Lan","Ngày báo hiếu cha mẹ, tổ tiên, đồng thời là rằm tháng Bảy.","Người Việt cài hoa hồng, cúng gia tiên, làm việc thiện và tưởng nhớ người khuất."],"8-15":["Tết Trung Thu","Ngày rằm tháng Tám, tết của thiếu nhi và mùa trăng đoàn viên.","Trẻ em rước đèn, phá cỗ, múa lân; gia đình thưởng trăng, ăn bánh."],"12-23":["Ông Công Ông Táo","Ngày tiễn Táo quân về trời báo cáo việc bếp núc và nếp nhà.","Gia đình dọn bếp, cúng cá chép và chuẩn bị bước vào không khí Tết."]};
+    let sel=sod(new Date()),block=sod(new Date()),sm=sel.getMonth(),sy=sel.getFullYear(),audio,lastY=scrollY;
+    function ip(x){return Math.floor(x)}function jd(d,m,y){let a=ip((14-m)/12),yy=y+4800-a,mm=m+12*a-3,r=d+ip((153*mm+2)/5)+365*yy+ip(yy/4)-ip(yy/100)+ip(yy/400)-32045;if(r<2299161)r=d+ip((153*mm+2)/5)+365*yy+ip(yy/4)-32083;return r}function j2d(j){let a,b,c;if(j>2299160){a=j+32044;b=ip((4*a+3)/146097);c=a-ip(b*146097/4)}else{b=0;c=j+32082}let d=ip((4*c+3)/1461),e=c-ip(1461*d/4),m=ip((5*e+2)/153);return [e-ip((153*m+2)/5)+1,m+3-12*ip(m/10),b*100+d-4800+ip(m/10)]}
+    function nm(k){let t=k/1236.85,t2=t*t,t3=t2*t,dr=Math.PI/180,j=2415020.75933+29.53058868*k+.0001178*t2-.000000155*t3;j+=.00033*Math.sin((166.56+132.87*t-.009173*t2)*dr);let m=359.2242+29.10535608*k-.0000333*t2-.00000347*t3,mp=306.0253+385.81691806*k+.0107306*t2+.00001236*t3,f=21.2964+390.67050646*k-.0016528*t2-.00000239*t3,c=(.1734-.000393*t)*Math.sin(m*dr)+.0021*Math.sin(2*m*dr)-.4068*Math.sin(mp*dr)+.0161*Math.sin(2*mp*dr)-.0004*Math.sin(3*mp*dr)+.0104*Math.sin(2*f*dr)-.0051*Math.sin((m+mp)*dr)-.0074*Math.sin((m-mp)*dr)+.0004*Math.sin((2*f+m)*dr)-.0004*Math.sin((2*f-m)*dr)-.0006*Math.sin((2*f+mp)*dr)+.001*Math.sin((2*f-mp)*dr)+.0005*Math.sin((2*mp+m)*dr),dt=t<-11?.001+.000839*t+.0002261*t2-.00000845*t3-.000000081*t*t3:-.000278+.000265*t+.000262*t2;return j+c-dt}function sun(j){let t=(j-2451545)/36525,t2=t*t,dr=Math.PI/180,m=357.52910+35999.05030*t-.0001559*t2-.00000048*t*t2,l0=280.46645+36000.76983*t+.0003032*t2,dl=(1.9146-.004817*t-.000014*t2)*Math.sin(dr*m)+(.019993-.000101*t)*Math.sin(2*dr*m)+.000290*Math.sin(3*dr*m),l=(l0+dl)*dr;return l-Math.PI*2*ip(l/(Math.PI*2))}function nmd(k,tz){return ip(nm(k)+.5+tz/24)}function sl(d,tz){return ip(sun(d-.5-tz/24)/Math.PI*6)}function m11(y,tz){let off=jd(31,12,y)-2415021,k=ip(off/29.530588853),n=nmd(k,tz);return sl(n,tz)>=9?nmd(k-1,tz):n}function leap(a,tz){let k=ip((a-2415021.076998695)/29.530588853+.5),last=0,i=1,arc=sl(nmd(k+i,tz),tz);do{last=arc;i++;arc=sl(nmd(k+i,tz),tz)}while(arc!==last&&i<14);return i-1}
+    function s2l(d,m,y,tz=TZ){let day=jd(d,m,y),k=ip((day-2415021.076998695)/29.530588853),ms=nmd(k+1,tz);if(ms>day)ms=nmd(k,tz);let a=m11(y,tz),b=a,ly;if(a>=ms){ly=y;a=m11(y-1,tz)}else{ly=y+1;b=m11(y+1,tz)}let ld=day-ms+1,diff=ip((ms-a)/29),ll=0,lm=diff+11;if(b-a>365){let lo=leap(a,tz);if(diff>=lo){lm=diff+10;if(diff===lo)ll=1}}if(lm>12)lm-=12;if(lm>=11&&diff<4)ly--;return [ld,lm,ly,ll]}function l2s(ld,lm,ly,ll=0,tz=TZ){let a,b;if(lm<11){a=m11(ly-1,tz);b=m11(ly,tz)}else{a=m11(ly,tz);b=m11(ly+1,tz)}let off=lm-11;if(off<0)off+=12;if(b-a>365){let lo=leap(a,tz),lm2=lo-2;if(lm2<0)lm2+=12;if(ll&&lm!==lm2)return[0,0,0];if(ll||off>=lo)off++}let k=ip(.5+(a-2415021.076998695)/29.530588853);return j2d(nmd(k+off,tz)+ld-1)}
+    function sod(d){return new Date(d.getFullYear(),d.getMonth(),d.getDate())}function pad(n){return String(n).padStart(2,"0")}function dkey(d){return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}function md(d){return `${pad(d.getMonth()+1)}-${pad(d.getDate())}`}function lk(l){return `${l[1]}-${l[0]}`}function fmt(d){return `${WD[d.getDay()]}, ${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`}function doy(d){return Math.floor((sod(d)-new Date(d.getFullYear(),0,0))/MS)}function week(d){let x=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));x.setUTCDate(x.getUTCDate()+4-(x.getUTCDay()||7));let y=new Date(Date.UTC(x.getUTCFullYear(),0,1));return Math.ceil((((x-y)/MS)+1)/7)}function ccy(y){return `${CAN[(y+6)%10]} ${CHI[(y+8)%12]}`}function ccd(d){let jdn=jd(d.getDate(),d.getMonth()+1,d.getFullYear());return{can:(jdn+9)%10,chi:(jdn+1)%12,text:`${CAN[(jdn+9)%10]} ${CHI[(jdn+1)%12]}`}}function ccm(l){return `${CAN[(l[2]*12+l[1]+3)%10]} ${CHI[(l[1]+1)%12]}`}function sx(c,ch){for(let i=0;i<60;i++)if(i%10===c&&i%12===ch)return i;return 0}function nap(d){let c=ccd(d),n=NAP[Math.floor(sx(c.can,c.chi)/2)],e=["Kim","Mộc","Thủy","Hỏa","Thổ"].find(x=>n.includes(x))||"Ngũ hành";return{nap:n,element:e}}function term(d){let k=md(d),a=TERMS.at(-1)[1],ex="";TERMS.forEach(([s,n])=>{if(k>=s)a=n;if(k===s)ex=n});return{active:a,exact:ex}}
+    function good(d,l){let b=ccd(d).chi,t=[[0,1,5,7],[2,3,7,9],[4,5,9,11],[6,7,1,9],[8,9,1,3],[10,11,3,5],[0,1,5,7],[2,3,7,9],[4,5,9,11],[6,7,1,9],[8,9,1,3],[10,11,3,5]];return t[(l[1]-1+12)%12].includes(b)}function hours(d){let b=ccd(d).chi,g={"0,6":[0,1,3,6,8,9],"1,7":[2,3,5,8,10,11],"2,8":[0,1,4,5,7,10],"3,9":[0,2,3,6,7,9],"4,10":[2,4,5,8,9,11],"5,11":[1,4,6,7,10,11]},k=Object.keys(g).find(x=>x.split(',').map(Number).includes(b));return g[k].map(i=>({idx:i,name:CHI[i],label:`${CHI[i]} (${pad(i===0?23:i*2-1)}:00-${pad(i===0?1:i*2+1)}:00)`}))}function hbranch(n=new Date()){let h=n.getHours();return h===23||h<1?0:Math.floor((h+1)/2)%12}function hdays(d,l){let a=[],s=SH[md(d)],lh=LH[lk(l)];if(s)a.push({name:s[0],history:s[1],folk:s[2],type:"Dương lịch"});if(lh&&!l[3])a.push({name:lh[0],history:lh[1],folk:lh[2],type:"Âm lịch"});return a}function info(d){let l=s2l(d.getDate(),d.getMonth()+1,d.getFullYear()),cc=ccd(d),np=nap(d),tm=term(d),gd=good(d,l),hs=hdays(d,l);return{date:d,lunar:l,ccDay:cc,nap:np,term:tm,good:gd,holidays:hs,hoangDaoHours:hours(d),dayOfYear:doy(d),week:week(d),canChiMonth:ccm(l),canChiYear:ccy(l[2]),advice:gd?"Ngày Hoàng Đạo: hợp khai trương, xuất hành, cầu tài, ký kết và việc vui.":"Ngày Hắc Đạo: nên giữ việc quan trọng chậm lại, hợp tu sửa nhỏ, tĩnh tâm và chuẩn bị."}}
+    function holidayList(y){let a=[];for(let yy of [y,y+1]){Object.entries(SH).forEach(([k,v])=>{let[m,d]=k.split('-').map(Number);a.push({date:new Date(yy,m-1,d),name:v[0],history:v[1],folk:v[2],type:"Dương lịch"})});Object.entries(LH).forEach(([k,v])=>{let[m,d]=k.split('-').map(Number),s=l2s(d,m,yy);if(s[0])a.push({date:new Date(s[2],s[1]-1,s[0]),name:v[0],history:v[1],folk:v[2],type:"Âm lịch"})})}return a.sort((x,y)=>x.date-y.date)}function nearest(from=new Date()){let t=sod(from);return holidayList(t.getFullYear()).find(x=>x.date>=t)}function leftSolar(d){return Math.max(0,Math.ceil((new Date(d.getFullYear(),11,31)-sod(d))/MS))}function leftLunar(d){let l=s2l(d.getDate(),d.getMonth()+1,d.getFullYear()),s=l2s(1,1,l[2]+1),tet=new Date(s[2],s[1]-1,s[0]);return Math.max(0,Math.ceil((tet-sod(d))/MS)-1)}
+    function card(d,t){let i=info(d),h=i.holidays[0];t.innerHTML=`<div>${fmt(d)}</div><span class="big-day">${d.getDate()}</span><div>Tháng ${d.getMonth()+1} năm ${d.getFullYear()}</div><div class="tags"><span class="tag">Âm ${i.lunar[0]}/${i.lunar[1]}${i.lunar[3]?" nhuận":""}</span><span class="tag">${i.ccDay.text}</span><span class="tag">${i.good?"Ngày Hoàng Đạo":"Ngày Hắc Đạo"}</span></div><div class="tags"><span class="tag">Ngày ${i.dayOfYear} trong năm</span><span class="tag">Tuần ${i.week}</span>${h?`<span class="tag">${h.name}</span>`:""}</div>`}function details(i,t){let hn=i.holidays.length?i.holidays.map(h=>`${h.name} (${h.type})`).join(', '):"Không có ngày lễ lớn";t.innerHTML=`<div><dt>Dương lịch</dt><dd>${fmt(i.date)}</dd></div><div><dt>Âm lịch</dt><dd>${i.lunar[0]}/${i.lunar[1]}/${i.lunar[2]}${i.lunar[3]?" (nhuận)":""}</dd></div><div><dt>Can chi ngày</dt><dd>${i.ccDay.text}</dd></div><div><dt>Can chi tháng</dt><dd>${i.canChiMonth}</dd></div><div><dt>Can chi năm</dt><dd>${i.canChiYear}</dd></div><div><dt>Ngũ hành nạp âm</dt><dd>${i.nap.nap} · ${i.nap.element}</dd></div><div><dt>Tiết khí</dt><dd>${i.term.active}${i.term.exact?" · Chính tiết":""}</dd></div><div><dt>Ngày tốt xấu</dt><dd>${i.good?"Ngày Hoàng Đạo":"Ngày Hắc Đạo"}</dd></div><div><dt>Việc nên lưu ý</dt><dd>${i.advice}</dd></div><div><dt>Giờ hoàng đạo</dt><dd>${i.hoangDaoHours.map(h=>h.label).join(', ')}</dd></div><div><dt>Ngày / tuần trong năm</dt><dd>Ngày ${i.dayOfYear}, tuần ${i.week}</dd></div><div><dt>Ngày lễ</dt><dd>${hn}</dd></div>`}
+    function renderHome(){let t=sod(new Date()),i=info(t),n=nearest(t);card(t,$('todayCard'));card(block,$('blockCard'));details(i,$('homeDetail'));$('proverb').textContent=PRO[(doy(t)-1)%PRO.length];$('solarLeft').textContent=leftSolar(t);$('lunarLeft').textContent=leftLunar(t);$('nearestLeft').textContent=Math.ceil((n.date-t)/MS);mini(t)}function mini(d){let y=d.getFullYear(),m=d.getMonth(),f=new Date(y,m,1),days=new Date(y,m+1,0).getDate(),html=["CN","T2","T3","T4","T5","T6","T7"].map(x=>`<div style="color:var(--lacquer)">${x}</div>`).join('');for(let i=0;i<f.getDay();i++)html+=`<div class="muted"></div>`;for(let x=1;x<=days;x++)html+=`<div class="${x===d.getDate()?"today":""}">${x}</div>`;$('mini').innerHTML=html}
+    function controls(){$('month').innerHTML=Array.from({length:12},(_,i)=>`<option value="${i}">Tháng ${i+1}</option>`).join('');$('year').innerHTML=Array.from({length:201},(_,i)=>1900+i).map(y=>`<option>${y}</option>`).join('');$('month').value=sm;$('year').value=sy}function renderCal(){let g=$('cal');$('month').value=sm;$('year').value=sy;$('calSub').textContent=`Tháng ${sm+1}/${sy} · chọn một ngày để xem popup đầy đủ thông tin`;let html=["CN","T2","T3","T4","T5","T6","T7"].map(x=>`<div class="wd">${x}</div>`).join(''),first=new Date(sy,sm,1),start=new Date(sy,sm,1-first.getDay()),tk=dkey(new Date());for(let i=0;i<42;i++){let d=new Date(start.getFullYear(),start.getMonth(),start.getDate()+i),inf=info(d),out=d.getMonth()!==sm,h=inf.holidays[0];html+=`<button class="day ${out?'out':''} ${dkey(d)===tk?'today':''} ${inf.good?'good':'bad'}" data-date="${dkey(d)}" type="button"><div class="solar">${d.getDate()}</div><div class="lunar">Âm ${inf.lunar[0]}/${inf.lunar[1]}</div><div class="cell-tags"><span class="ctag ${inf.good?'good':'bad'}">${inf.good?'Hoàng đạo':'Hắc đạo'}</span><span class="ctag">${inf.ccDay.text}</span>${inf.term.exact?`<span class="ctag">${inf.term.exact}</span>`:''}${h?`<span class="ctag festival">${h.name}</span>`:''}</div></button>`}g.innerHTML=html;details(info(sel),$('selectedDetail'))}function openModal(d){sel=sod(d);let i=info(sel);$('modalTitle').textContent=fmt(sel);$('modalSub').textContent=`Âm lịch ${i.lunar[0]}/${i.lunar[1]}/${i.lunar[2]} · ${i.good?'Ngày Hoàng Đạo':'Ngày Hắc Đạo'}`;details(i,$('modalDetail'));let s=$('story');if(i.holidays.length){s.hidden=false;s.innerHTML=i.holidays.map(h=>`<strong>${h.name}</strong><br><span>${h.history}</span><br><em>Dân gian: ${h.folk}</em>`).join('<hr>')}else{s.hidden=true;s.innerHTML=''}$('modal').classList.add('open');renderCal()}
+    function box(target,el){let now=new Date(),diff=Math.max(0,target-now),d=Math.floor(diff/MS);diff-=d*MS;let h=Math.floor(diff/36e5);diff-=h*36e5;let m=Math.floor(diff/6e4);diff-=m*6e4;let s=Math.floor(diff/1e3);el.innerHTML=[["Ngày",d],["Giờ",h],["Phút",m],["Giây",s]].map(([l,v])=>`<div class="box"><div><strong>${pad(v)}</strong><span>${l}</span></div></div>`).join('')}function tetDate(from=new Date()){let l=s2l(from.getDate(),from.getMonth()+1,from.getFullYear()),s=l2s(1,1,l[2]),t=new Date(s[2],s[1]-1,s[0]);if(t<sod(from)){s=l2s(1,1,l[2]+1);t=new Date(s[2],s[1]-1,s[0])}return t}function counts(){let tet=tetDate(),ny=new Date(new Date().getFullYear()+1,0,1),n=nearest();$('tetLabel').textContent=`Mốc đến: ${fmt(tet)}`;$('holidayLabel').textContent=`${n.name} · ${fmt(n.date)}`;box(tet,$('tetCount'));box(ny,$('nyCount'));box(n.date,$('holidayCount'));celebrate(tet)}function clock(){let n=new Date();$('time').textContent=`${WD[n.getDay()]} · ${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`;checkHour(n)}function toast(msg){let e=document.createElement('div');e.className='toast';e.textContent=msg;$('toasts').appendChild(e);setTimeout(()=>e.remove(),6100)}function firstToast(){let n=nearest(),days=Math.ceil((n.date-sod(new Date()))/MS),k=`nearest-${dkey(new Date())}-${dkey(n.date)}`;if(localStorage.getItem(k))return;localStorage.setItem(k,'1');toast(days===0?`Hôm nay là ${n.name}.`:`Còn ${days} ngày đến ${n.name}.`)}function bell(){audio||(audio=new(window.AudioContext||window.webkitAudioContext)());if(audio.state==='suspended')audio.resume();let now=audio.currentTime;[196,246.94,329.63].forEach((f,i)=>{let o=audio.createOscillator(),g=audio.createGain();o.type='sine';o.frequency.setValueAtTime(f,now);g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(.16/(i+1),now+.025);g.gain.exponentialRampToValueAtTime(.0001,now+2.4);o.connect(g).connect(audio.destination);o.start(now);o.stop(now+2.45)});$('bell').classList.add('ring');setTimeout(()=>$('bell').classList.remove('ring'),900)}function checkHour(n){if(n.getMinutes()!==0&&n.getMinutes()!==1)return;let b=hbranch(n),f=info(n).hoangDaoHours.find(h=>h.idx===b);if(!f)return;let k=`hd-${dkey(n)}-${b}`;if(localStorage.getItem(k))return;localStorage.setItem(k,'1');toast(`Đã sang giờ ${f.name} - Giờ Hoàng Đạo`);try{bell()}catch(e){}}
+    function weatherText(c){if([0,1].includes(c))return"Trời nắng";if([2,3,45,48].includes(c))return"Nhiều mây";if([51,53,55,61,63,65,80,81,82,95].includes(c))return"Trời mưa";if([71,73,75,77,85,86].includes(c))return"Trời tuyết";return"Thời tiết"}function effect(kind,temp=28){let l=$('weatherLayer');l.innerHTML='';if(kind==='sunny')l.innerHTML='<div class="sunbeam"></div>';if(kind==='rain')for(let i=0;i<80;i++){let e=document.createElement('div');e.className='rain';e.style.left=Math.random()*100+'%';e.style.animationDuration=.7+Math.random()*.9+'s';e.style.animationDelay=Math.random()*4+'s';l.appendChild(e)}if(kind==='snow'||temp<=12)for(let i=0;i<65;i++){let e=document.createElement('div');e.className='snow';e.style.left=Math.random()*100+'%';e.style.animationDuration=5+Math.random()*9+'s';e.style.animationDelay=Math.random()*8+'s';l.appendChild(e)}}async function loadWeather(lat=21.0278,lon=105.8342,place='Hà Nội'){try{let r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&timezone=Asia%2FBangkok`),d=await r.json(),temp=Math.round(d.current.temperature_2m),code=d.current.weather_code,txt=weatherText(code);$('weather').textContent=`${place}: ${txt}, ${temp}°C`;effect([0,1].includes(code)?'sunny':[51,53,55,61,63,65,80,81,82,95].includes(code)?'rain':[71,73,75,77,85,86].includes(code)?'snow':'cloudy',temp)}catch(e){$('weather').textContent='Thời tiết: chưa kết nối';effect('sunny')}}function initWeather(){navigator.geolocation?navigator.geolocation.getCurrentPosition(p=>loadWeather(p.coords.latitude,p.coords.longitude,'Vị trí hiện tại'),()=>loadWeather(),{timeout:4500,maximumAge:6e5}):loadWeather()}
+    function celebrate(tet){let diff=new Date()-tet;if(diff<0||diff>6e5)return;let c=$('celebration');if(c.classList.contains('active'))return;c.classList.add('active');let l=$('celeLayer');l.innerHTML='';for(let i=0;i<36;i++){let e=document.createElement('div');e.className='lantern';e.style.left=Math.random()*100+'%';e.style.animationDelay=Math.random()*180+'s';l.appendChild(e)}setTimeout(()=>{for(let i=0;i<24;i++){let e=document.createElement('div');e.className='firework';e.style.left=8+Math.random()*84+'%';e.style.top=12+Math.random()*54+'%';e.style.animationDelay=Math.random()*8+'s';l.appendChild(e)}["Vạn sự như ý","Tấn tài tấn lộc","Bình an như ý","Gia đạo an khang","Xuân mới phát tài"].forEach((x,i)=>{let e=document.createElement('div');e.className='wish';e.textContent=x;e.style.top=58+i*7+'%';e.style.animationDelay=i*1.4+'s';l.appendChild(e)})},Math.max(0,18e4-diff));setTimeout(()=>c.classList.remove('active'),6e5-diff)}
+    function page(p){document.querySelectorAll('.page').forEach(e=>e.classList.toggle('active',e.id===p));document.querySelectorAll('.nav-item').forEach(e=>e.classList.toggle('active',e.dataset.page===p));scrollTo({top:0,behavior:'smooth'});if(p==='calendar')renderCal();if(p==='countdown')counts()}function bind(){document.querySelectorAll('.nav-item').forEach(i=>i.onclick=()=>page(i.dataset.page));$('close').onclick=()=>$('modal').classList.remove('open');$('modal').onclick=e=>{if(e.target.id==='modal')$('modal').classList.remove('open')};$('month').onchange=e=>{sm=+e.target.value;renderCal()};$('year').onchange=e=>{sy=+e.target.value;renderCal()};$('cal').onclick=e=>{let c=e.target.closest('.day');if(!c)return;let[y,m,d]=c.dataset.date.split('-').map(Number);openModal(new Date(y,m-1,d))};$('todayCal').onclick=()=>{sel=sod(new Date());sm=sel.getMonth();sy=sel.getFullYear();renderCal();openModal(sel)};$('goToday').onclick=()=>{sel=sod(new Date());sm=sel.getMonth();sy=sel.getFullYear();page('calendar');setTimeout(()=>openModal(sel),250)};$('share').onclick=async()=>{let i=info(new Date()),text=`PGN Vạn Niên hôm nay: ${fmt(new Date())}, âm ${i.lunar[0]}/${i.lunar[1]}, ${i.ccDay.text}, ${i.good?'ngày Hoàng Đạo':'ngày Hắc Đạo'}.`;if(navigator.share)await navigator.share({title:'Lịch hôm nay - PGN Vạn Niên',text,url:location.href});else{await navigator.clipboard.writeText(`${text} ${location.href}`);toast('Đã sao chép thông tin lịch hôm nay.')}};$('nextBlock').onclick=()=>{let c=$('blockCard');c.classList.add('tearing');setTimeout(()=>{block=new Date(block.getFullYear(),block.getMonth(),block.getDate()+1);card(block,c);c.classList.remove('tearing')},820)};$('resetBlock').onclick=()=>{block=sod(new Date());card(block,$('blockCard'))};$('bell').onclick=()=>{bell();toast(`Chuông PGN đã bật. Hiện tại là giờ ${CHI[hbranch()]}.`)};addEventListener('scroll',()=>{let y=scrollY;$('header').classList.toggle('hidden',y>lastY&&y>95);lastY=y},{passive:true})}function init(){$('copyYear').textContent=new Date().getFullYear();controls();renderHome();renderCal();clock();counts();firstToast();initWeather();bind();setInterval(clock,1000);setInterval(counts,1000);setInterval(renderHome,60000);setInterval(initWeather,9e5)}init();
+  </script>
 </body>
 </html>
